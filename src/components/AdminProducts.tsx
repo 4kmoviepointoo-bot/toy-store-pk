@@ -111,6 +111,7 @@ export function AdminProducts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [imagePreviewError, setImagePreviewError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState<number | null>(null);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -769,13 +770,47 @@ export function AdminProducts() {
                             </div>
                           )}
                         </div>
-                        <input
-                          type="text"
-                          value={form[field]}
-                          onChange={(e) => handleFieldChange(field, e.target.value)}
-                          placeholder="Paste image URL..."
-                          className="flex-1 rounded-lg border border-border bg-surface-light px-3 py-1.5 text-[11px] text-text-primary placeholder:text-text-muted focus:border-purple/40 focus:outline-none focus:ring-2 focus:ring-purple/10 transition-all"
-                        />
+                        <div className="flex-1 space-y-2">
+                          <label
+                            className={`flex items-center justify-center gap-1.5 rounded-lg border-2 border-dashed px-3 py-1.5 text-[11px] font-semibold cursor-pointer transition-all ${
+                              galleryUploading === i
+                                ? "border-brand/30 bg-brand/5 text-brand"
+                                : "border-border hover:border-brand/40 text-text-secondary hover:text-brand"
+                            }`}
+                          >
+                            {galleryUploading === i ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <span>📁</span>
+                            )}
+                            Upload
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const fd = new FormData();
+                                fd.append("file", file);
+                                setGalleryUploading(i);
+                                fetch("/api/upload", { method: "POST", body: fd, signal: AbortSignal.timeout(30000) })
+                                  .then(r => r.json())
+                                  .then(d => { if (d.success) handleFieldChange(field, d.data.url); })
+                                  .catch(() => {})
+                                  .finally(() => { setGalleryUploading(null); e.target.value = ""; });
+                              }}
+                              disabled={galleryUploading !== null}
+                              className="sr-only"
+                            />
+                          </label>
+                          <input
+                            type="text"
+                            value={form[field]}
+                            onChange={(e) => handleFieldChange(field, e.target.value)}
+                            placeholder="Paste image URL..."
+                            className="w-full rounded-lg border border-border bg-surface-light px-3 py-1.5 text-[11px] text-text-primary placeholder:text-text-muted focus:border-purple/40 focus:outline-none focus:ring-2 focus:ring-purple/10 transition-all"
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
