@@ -18,8 +18,21 @@ export class ApiError extends Error {
   }
 }
 
+const COMPRESSION_HEADERS: Record<string, string> = {
+  "Vary": "Accept-Encoding",
+  "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+};
+
+function jsonResponse(body: unknown, status: number): NextResponse {
+  const res = NextResponse.json(body, { status });
+  for (const [key, value] of Object.entries(COMPRESSION_HEADERS)) {
+    res.headers.set(key, value);
+  }
+  return res;
+}
+
 export function apiSuccess<T>(data: T, status: number = 200): NextResponse {
-  return NextResponse.json({ success: true, data } satisfies ApiResponse<T>, { status });
+  return jsonResponse({ success: true, data } satisfies ApiResponse<T>, status);
 }
 
 export function apiError(
@@ -27,9 +40,9 @@ export function apiError(
   status: number = 500,
   code: string = "INTERNAL_ERROR"
 ): NextResponse {
-  return NextResponse.json(
+  return jsonResponse(
     { success: false, error: message, code } satisfies ApiResponse,
-    { status }
+    status
   );
 }
 
