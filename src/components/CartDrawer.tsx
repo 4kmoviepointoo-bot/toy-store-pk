@@ -47,12 +47,18 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const remaining = isThresholdEnabled ? Math.max(0, freeDeliveryThreshold - selectedSubtotal) : 0;
 
   useEffect(() => {
+    let raf: number;
     if (open) {
-      document.body.style.overflow = "hidden";
+      raf = requestAnimationFrame(() => {
+        document.body.style.overflow = "hidden";
+      });
     } else {
-      document.body.style.overflow = "";
+      raf = requestAnimationFrame(() => {
+        document.body.style.overflow = "";
+      });
     }
     return () => {
+      cancelAnimationFrame(raf);
       document.body.style.overflow = "";
     };
   }, [open]);

@@ -121,6 +121,7 @@ export function Hero() {
                   priority
                   quality={85}
                   className="object-cover"
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/20 to-transparent pointer-events-none" />
               </div>

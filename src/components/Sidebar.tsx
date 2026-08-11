@@ -19,7 +19,8 @@ export function Sidebar() {
   const [threshold, setThreshold] = useState(2500);
 
   useEffect(() => {
-    fetch("/api/settings")
+    const controller = new AbortController();
+    fetch("/api/settings", { signal: controller.signal })
       .then((res) => res.json())
       .then((resData) => {
         const data = resData.data || resData;
@@ -28,6 +29,7 @@ export function Sidebar() {
         }
       })
       .catch(() => {});
+    return () => controller.abort();
   }, []);
 
   return (

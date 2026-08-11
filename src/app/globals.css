@@ -716,3 +716,10 @@ html {
     transition: none;
   }
 }
+
+/* Performance: content-visibility for below-the-fold sections */
+.featured-section,
+.shop-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}

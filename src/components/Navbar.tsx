@@ -25,14 +25,15 @@ export function Navbar() {
   const { user, logout } = useAuth();
 
   useEffect(() => {
+    if (!accountOpen) return;
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setAccountOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside, { passive: true });
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [accountOpen]);
 
   const handleLogout = async () => {
     setAccountOpen(false);
