@@ -8,6 +8,15 @@ const NOTIFICATION_EMAIL = "4kmoviepointoo@gmail.com";
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "asgah960@gmail.com";
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923037663472";
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 interface OrderNotificationData {
   orderId: string;
   customer: { name: string; phone: string; email: string | null };
@@ -26,9 +35,9 @@ function buildItemsRows(items: OrderNotificationData["items"]): string {
     .map(
       (item) => `
       <tr>
-        <td style="padding:12px 16px;border-bottom:1px solid #184841;font-size:14px;color:#f7fafa;">${item.name}</td>
+        <td style="padding:12px 16px;border-bottom:1px solid #184841;font-size:14px;color:#f7fafa;">${escapeHtml(item.name)}</td>
         <td style="padding:12px 16px;border-bottom:1px solid #184841;font-size:14px;color:#f7fafa;text-align:center;">${item.quantity}</td>
-        <td style="padding:12px 16px;border-bottom:1px solid #184841;font-size:14px;color:#f7fafa;text-align:right;font-weight:600;">${item.price}</td>
+        <td style="padding:12px 16px;border-bottom:1px solid #184841;font-size:14px;color:#f7fafa;text-align:right;font-weight:600;">${escapeHtml(item.price)}</td>
       </tr>`
     )
     .join("");
@@ -82,10 +91,10 @@ function buildCustomerEmailHtml(order: OrderNotificationData): string {
     <div style="background:#0e2f2b;border-radius:16px;padding:22px 28px;margin-bottom:16px;border:1px solid #184841;">
       <h3 style="margin:0 0 14px;font-size:15px;color:#f7fafa;">Delivery Details</h3>
       <p style="margin:0;font-size:14px;color:#a0b4b0;line-height:1.6;">
-        ${order.customer.name}<br/>
-        ${order.delivery.address}<br/>
-        ${order.delivery.city}<br/>
-        ${order.customer.phone}
+        ${escapeHtml(order.customer.name)}<br/>
+        ${escapeHtml(order.delivery.address)}<br/>
+        ${escapeHtml(order.delivery.city)}<br/>
+        ${escapeHtml(order.customer.phone)}
       </p>
     </div>
 
@@ -104,7 +113,7 @@ function buildCustomerEmailHtml(order: OrderNotificationData): string {
 }
 
 function buildAdminEmailHtml(order: OrderNotificationData): string {
-  const itemsList = order.items.map((i) => `${i.quantity}x ${i.name} (${i.price})`).join("<br/>");
+  const itemsList = order.items.map((i) => `${i.quantity}x ${escapeHtml(i.name)} (${escapeHtml(i.price)})`).join("<br/>");
 
   return `<!DOCTYPE html>
 <html>
@@ -119,9 +128,9 @@ function buildAdminEmailHtml(order: OrderNotificationData): string {
     <div style="background:#0e2f2b;border:1px solid #184841;border-radius:12px;padding:22px;margin-bottom:12px;">
       <h3 style="margin:0 0 10px;font-size:15px;color:#f7fafa;">Customer</h3>
       <p style="margin:0;font-size:14px;color:#a0b4b0;">
-        ${order.customer.name} | ${order.customer.phone}${order.customer.email ? ` | ${order.customer.email}` : ""}
+        ${escapeHtml(order.customer.name)} | ${escapeHtml(order.customer.phone)}${order.customer.email ? ` | ${escapeHtml(order.customer.email)}` : ""}
       </p>
-      <p style="margin:5px 0 0;font-size:14px;color:#a0b4b0;">${order.delivery.address}, ${order.delivery.city}</p>
+      <p style="margin:5px 0 0;font-size:14px;color:#a0b4b0;">${escapeHtml(order.delivery.address)}, ${escapeHtml(order.delivery.city)}</p>
     </div>
 
     <div style="background:#0e2f2b;border:1px solid #184841;border-radius:12px;padding:22px;margin-bottom:12px;">

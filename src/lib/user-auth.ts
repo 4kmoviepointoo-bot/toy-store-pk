@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { findUserById } from "@/services/users.service";
 import type { SerializedUser } from "@/models/User";
-import { verifySessionToken } from "@/lib/jwt";
+import { verifyUserSessionToken } from "@/lib/jwt";
 
 export async function getAuthenticatedUser(): Promise<SerializedUser | null> {
   try {
@@ -9,7 +9,7 @@ export async function getAuthenticatedUser(): Promise<SerializedUser | null> {
     const sessionCookie = cookieStore.get("user_session");
     if (!sessionCookie?.value) return null;
 
-    const result = await verifySessionToken(sessionCookie.value);
+    const result = await verifyUserSessionToken(sessionCookie.value);
     if (!result) return null;
 
     const user = await findUserById(result.sub);
@@ -22,7 +22,7 @@ export async function getAuthenticatedUser(): Promise<SerializedUser | null> {
       phone: user.phone,
       address: user.address,
       city: user.city,
-      createdAt: user.createdAt.toISOString(),
+      createdAt: user.createdAt?.toISOString() || "",
     };
   } catch {
     return null;

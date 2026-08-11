@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { createSessionToken, SESSION_MAX_AGE } from "@/lib/jwt";
+import { createAdminSessionToken, SESSION_MAX_AGE } from "@/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const token = await createSessionToken("admin");
+    const token = await createAdminSessionToken();
 
     const cookieStore = await cookies();
     cookieStore.set("admin_session", token, {

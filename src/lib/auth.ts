@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { verifySessionToken } from "@/lib/jwt";
+import { verifyAdminSessionToken } from "@/lib/jwt";
 
 export async function verifyAdminSession(): Promise<boolean> {
   try {
@@ -7,8 +7,8 @@ export async function verifyAdminSession(): Promise<boolean> {
     const sessionCookie = cookieStore.get("admin_session");
     if (!sessionCookie?.value) return false;
 
-    const result = await verifySessionToken(sessionCookie.value);
-    return result !== null;
+    const result = await verifyAdminSessionToken(sessionCookie.value);
+    return result !== null && result.sub === "admin";
   } catch {
     return false;
   }

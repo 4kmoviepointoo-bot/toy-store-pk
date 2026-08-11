@@ -102,7 +102,7 @@ export default function TrackOrderPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Order not found");
-      setOrder(data.order);
+      setOrder(data.data?.order || data.order);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

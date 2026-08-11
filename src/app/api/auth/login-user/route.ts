@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { createSafeRoute, apiSuccess, apiError } from "@/lib/api-wrapper";
-import { createSessionToken, SESSION_MAX_AGE } from "@/lib/jwt";
+import { createUserSessionToken, SESSION_MAX_AGE } from "@/lib/jwt";
 import { findUserByEmail, findUserByPhone } from "@/services/users.service";
 
 export const POST = createSafeRoute(async (request: NextRequest) => {
@@ -32,7 +32,7 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
   }
 
   const userIdStr = user._id!.toString();
-  const token = await createSessionToken(userIdStr);
+  const token = await createUserSessionToken(userIdStr);
 
   const response = apiSuccess({ userId: userIdStr });
 
