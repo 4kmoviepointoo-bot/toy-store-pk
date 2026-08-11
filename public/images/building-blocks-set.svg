@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0FDF4"/>
+      <stop offset="100%" style="stop-color:#ECFEFF"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bg2)" rx="24"/>
+  
+  <!-- Sparkles -->
+  <circle cx="50" cy="60" r="4" fill="#FBBF24" opacity="0.7"/>
+  <circle cx="350" cy="80" r="3" fill="#EC4899" opacity="0.6"/>
+  <circle cx="60" cy="340" r="3.5" fill="#8B5CF6" opacity="0.5"/>
+  <circle cx="340" cy="320" r="4" fill="#22C55E" opacity="0.6"/>
+  <circle cx="45" cy="200" r="2.5" fill="#3B82F6" opacity="0.5"/>
+  <circle cx="360" cy="210" r="3" fill="#F97316" opacity="0.5"/>
+  
+  <!-- Stars -->
+  <path d="M48 120 L50 126 L56 126 L51 130 L53 136 L48 132 L43 136 L45 130 L40 126 L46 126Z" fill="#FBBF24" opacity="0.6"/>
+  <path d="M352 140 L354 146 L360 146 L355 150 L357 156 L352 152 L347 156 L349 150 L344 146 L350 146Z" fill="#22C55E" opacity="0.5"/>
+  
+  <!-- Building Blocks Structure -->
+  <g transform="translate(60, 80)">
+    <!-- Base row - 4 blocks -->
+    <rect x="20" y="220" width="60" height="50" rx="6" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <rect x="25" y="225" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="50" cy="235" r="6" fill="#60A5FA"/>
+    
+    <rect x="85" y="220" width="60" height="50" rx="6" fill="#22C55E" stroke="#16A34A" stroke-width="2"/>
+    <rect x="90" y="225" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="115" cy="235" r="6" fill="#4ADE80"/>
+    
+    <rect x="150" y="220" width="60" height="50" rx="6" fill="#F97316" stroke="#EA580C" stroke-width="2"/>
+    <rect x="155" y="225" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="180" cy="235" r="6" fill="#FB923C"/>
+    
+    <rect x="215" y="220" width="60" height="50" rx="6" fill="#EC4899" stroke="#DB2777" stroke-width="2"/>
+    <rect x="220" y="225" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="245" cy="235" r="6" fill="#F472B6"/>
+    
+    <!-- Middle row - 3 blocks -->
+    <rect x="52" y="165" width="60" height="50" rx="6" fill="#FBBF24" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="57" y="170" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="82" cy="180" r="6" fill="#FCD34D"/>
+    
+    <rect x="117" y="165" width="60" height="50" rx="6" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="122" y="170" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="147" cy="180" r="6" fill="#A78BFA"/>
+    
+    <rect x="182" y="165" width="60" height="50" rx="6" fill="#06B6D4" stroke="#0891B2" stroke-width="2"/>
+    <rect x="187" y="170" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="212" cy="180" r="6" fill="#22D3EE"/>
+    
+    <!-- Top row - 2 blocks -->
+    <rect x="85" y="110" width="60" height="50" rx="6" fill="#EF4444" stroke="#DC2626" stroke-width="2"/>
+    <rect x="90" y="115" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="115" cy="125" r="6" fill="#F87171"/>
+    
+    <rect x="150" y="110" width="60" height="50" rx="6" fill="#14B8A6" stroke="#0D9488" stroke-width="2"/>
+    <rect x="155" y="115" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="180" cy="125" r="6" fill="#2DD4BF"/>
+    
+    <!-- Peak block -->
+    <rect x="117" y="55" width="60" height="50" rx="6" fill="#A855F7" stroke="#9333EA" stroke-width="2"/>
+    <rect x="122" y="60" width="8" height="35" rx="2" fill="white" opacity="0.2"/>
+    <circle cx="147" cy="70" r="6" fill="#C084FC"/>
+    
+    <!-- Flag on top -->
+    <line x1="147" y1="55" x2="147" y2="25" stroke="#78350F" stroke-width="3" stroke-linecap="round"/>
+    <path d="M147 25 L175 35 L147 45Z" fill="#EC4899"/>
+    
+    <!-- Loose blocks on ground -->
+    <rect x="-20" y="255" width="35" height="30" rx="5" fill="#FBBF24" stroke="#F59E0B" stroke-width="1.5" transform="rotate(-15, -2, 270)"/>
+    <rect x="275" y="260" width="35" height="30" rx="5" fill="#3B82F6" stroke="#2563EB" stroke-width="1.5" transform="rotate(10, 292, 275)"/>
+    <rect x="250" y="240" width="25" height="25" rx="4" fill="#22C55E" stroke="#16A34A" stroke-width="1.5" transform="rotate(20, 262, 252)"/>
+  </g>
+  
+  <!-- Ground -->
+  <ellipse cx="200" cy="370" rx="170" ry="15" fill="#D1FAE5" opacity="0.4"/>
+</svg>

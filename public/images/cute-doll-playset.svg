@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FDF2F8"/>
+      <stop offset="100%" style="stop-color:#F5F3FF"/>
+    </linearGradient>
+    <linearGradient id="dress1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899"/>
+      <stop offset="100%" style="stop-color:#DB2777"/>
+    </linearGradient>
+    <linearGradient id="hair1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#92400E"/>
+      <stop offset="100%" style="stop-color:#78350F"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bg1)" rx="24"/>
+  
+  <!-- Sparkles -->
+  <circle cx="50" cy="60" r="4" fill="#FBBF24" opacity="0.7"/>
+  <circle cx="340" cy="80" r="3" fill="#EC4899" opacity="0.6"/>
+  <circle cx="80" cy="320" r="3.5" fill="#8B5CF6" opacity="0.5"/>
+  <circle cx="320" cy="300" r="4" fill="#06B6D4" opacity="0.6"/>
+  <circle cx="60" cy="180" r="2.5" fill="#22C55E" opacity="0.5"/>
+  <circle cx="350" cy="200" r="3" fill="#F97316" opacity="0.5"/>
+  
+  <!-- Stars -->
+  <path d="M45 120 L47 126 L53 126 L48 130 L50 136 L45 132 L40 136 L42 130 L37 126 L43 126Z" fill="#FBBF24" opacity="0.6"/>
+  <path d="M345 150 L347 156 L353 156 L348 160 L350 166 L345 162 L340 166 L342 160 L337 156 L343 156Z" fill="#EC4899" opacity="0.5"/>
+  
+  <!-- Doll House -->
+  <rect x="200" y="100" width="160" height="130" rx="8" fill="#DDD6FE" stroke="#C4B5FD" stroke-width="2"/>
+  <path d="M190 110 L280 50 L370 110" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
+  <path d="M200 110 L280 60 L360 110" fill="#A78BFA"/>
+  <rect x="255" y="155" width="30" height="55" rx="15 15 0 0" fill="#7C3AED"/>
+  <circle cx="278" cy="182" r="2.5" fill="#FDE68A"/>
+  <rect x="215" y="125" width="25" height="20" rx="4" fill="#93C5FD" stroke="#C4B5FD" stroke-width="1"/>
+  <rect x="300" y="125" width="25" height="20" rx="4" fill="#93C5FD" stroke="#C4B5FD" stroke-width="1"/>
+  <line x1="227.5" y1="125" x2="227.5" y2="145" stroke="#C4B5FD" stroke-width="0.8"/>
+  <line x1="215" y1="135" x2="240" y2="135" stroke="#C4B5FD" stroke-width="0.8"/>
+  <line x1="312.5" y1="125" x2="312.5" y2="145" stroke="#C4B5FD" stroke-width="0.8"/>
+  <line x1="300" y1="135" x2="325" y2="135" stroke="#C4B5FD" stroke-width="0.8"/>
+  <path d="M272 72 C272 68, 266 64, 266 68 C266 64, 260 68, 260 72 C260 78, 266 82, 266 82 C266 82, 272 78, 272 72Z" fill="#EC4899" opacity="0.7"/>
+  
+  <!-- Doll -->
+  <g transform="translate(60, 90)">
+    <!-- Dress -->
+    <path d="M50 90 L30 170 L70 170Z" fill="url(#dress1)"/>
+    <path d="M38 120 L62 120" stroke="#DB2777" stroke-width="1.5" opacity="0.4"/>
+    <path d="M35 135 L65 135" stroke="#DB2777" stroke-width="1" opacity="0.3"/>
+    <!-- Body -->
+    <rect x="40" y="62" width="20" height="30" rx="5" fill="#FDE68A"/>
+    <!-- Arms -->
+    <line x1="40" y1="72" x2="25" y2="90" stroke="#FDE68A" stroke-width="6" stroke-linecap="round"/>
+    <line x1="60" y1="72" x2="75" y2="90" stroke="#FDE68A" stroke-width="6" stroke-linecap="round"/>
+    <!-- Hands -->
+    <circle cx="24" cy="91" r="4" fill="#FDE68A"/>
+    <circle cx="76" cy="91" r="4" fill="#FDE68A"/>
+    <!-- Head -->
+    <circle cx="50" cy="45" r="22" fill="#FDE68A"/>
+    <!-- Hair -->
+    <path d="M28 45 C28 22, 72 22, 72 45" fill="url(#hair1)"/>
+    <path d="M28 45 C28 35, 32 26, 38 22" stroke="#78350F" stroke-width="2" fill="none"/>
+    <path d="M72 45 C72 35, 68 26, 62 22" stroke="#78350F" stroke-width="2" fill="none"/>
+    <!-- Eyes -->
+    <circle cx="42" cy="45" r="3" fill="#1E293B"/>
+    <circle cx="58" cy="45" r="3" fill="#1E293B"/>
+    <circle cx="43" cy="43.5" r="1" fill="white"/>
+    <circle cx="59" cy="43.5" r="1" fill="white"/>
+    <!-- Smile -->
+    <path d="M44 53 Q50 57, 56 53" stroke="#EC4899" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Blush -->
+    <ellipse cx="36" cy="50" rx="4" ry="2" fill="#F9A8D4" opacity="0.5"/>
+    <ellipse cx="64" cy="50" rx="4" ry="2" fill="#F9A8D4" opacity="0.5"/>
+    <!-- Bow -->
+    <path d="M38 24 C34 18, 26 22, 32 28 L50 28 C46 22, 54 18, 38 24Z" fill="#EC4899"/>
+    <circle cx="44" cy="25" r="2.5" fill="#DB2777"/>
+    <!-- Legs -->
+    <line x1="42" y1="170" x2="40" y2="195" stroke="#FDE68A" stroke-width="5" stroke-linecap="round"/>
+    <line x1="58" y1="170" x2="60" y2="195" stroke="#FDE68A" stroke-width="5" stroke-linecap="round"/>
+    <!-- Shoes -->
+    <ellipse cx="38" cy="197" rx="7" ry="4" fill="#EC4899"/>
+    <ellipse cx="62" cy="197" rx="7" ry="4" fill="#EC4899"/>
+  </g>
+  
+  <!-- Ground -->
+  <ellipse cx="200" cy="350" rx="170" ry="15" fill="#E9D5FF" opacity="0.4"/>
+</svg>

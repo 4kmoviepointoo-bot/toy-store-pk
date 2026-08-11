@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFBEB"/>
+      <stop offset="100%" style="stop-color:#FFF7ED"/>
+    </linearGradient>
+    <linearGradient id="piano1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#DC2626"/>
+    </linearGradient>
+    <linearGradient id="piano2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F97316"/>
+      <stop offset="100%" style="stop-color:#EA580C"/>
+    </linearGradient>
+    <linearGradient id="piano3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBBF24"/>
+      <stop offset="100%" style="stop-color:#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="piano4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22C55E"/>
+      <stop offset="100%" style="stop-color:#16A34A"/>
+    </linearGradient>
+    <linearGradient id="piano5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+    <linearGradient id="piano6" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="piano7" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899"/>
+      <stop offset="100%" style="stop-color:#DB2777"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bg2)" rx="24"/>
+  
+  <!-- Sparkles -->
+  <circle cx="55" cy="70" r="4" fill="#FBBF24" opacity="0.7"/>
+  <circle cx="345" cy="90" r="3" fill="#EC4899" opacity="0.6"/>
+  <circle cx="70" cy="330" r="3.5" fill="#8B5CF6" opacity="0.5"/>
+  <circle cx="330" cy="310" r="4" fill="#3B82F6" opacity="0.6"/>
+  <circle cx="50" cy="200" r="2.5" fill="#22C55E" opacity="0.5"/>
+  <circle cx="355" cy="210" r="3" fill="#F97316" opacity="0.5"/>
+  
+  <!-- Music Notes floating -->
+  <g fill="#8B5CF6" opacity="0.5">
+    <path d="M80 100 C80 95, 90 90, 90 95 L90 115 C90 120, 80 125, 80 120 C80 125, 70 120, 70 115 C70 110, 80 105, 80 100Z" transform="scale(0.8) translate(20, 30)"/>
+    <path d="M320 120 C320 115, 330 110, 330 115 L330 135 C330 140, 320 145, 320 140 C320 145, 310 140, 310 135 C310 130, 320 125, 320 120Z" transform="scale(0.7) translate(120, 50)"/>
+  </g>
+  <g fill="#EC4899" opacity="0.4">
+    <path d="M100 280 C100 275, 110 270, 110 275 L110 295 C110 300, 100 305, 100 300 C100 305, 90 300, 90 295 C90 290, 100 285, 100 280Z" transform="scale(0.6) translate(50, 100)"/>
+    <path d="M300 300 C300 295, 310 290, 310 295 L310 315 C310 320, 300 325, 300 320 C300 325, 290 320, 290 315 C290 310, 300 305, 300 300Z" transform="scale(0.6) translate(180, 80)"/>
+  </g>
+  
+  <!-- Stars -->
+  <path d="M50 150 L52 156 L58 156 L53 160 L55 166 L50 162 L45 166 L47 160 L42 156 L48 156Z" fill="#FBBF24" opacity="0.6"/>
+  <path d="M350 170 L352 176 L358 176 L353 180 L355 186 L350 182 L345 186 L347 180 L342 176 L348 176Z" fill="#F97316" opacity="0.5"/>
+  
+  <!-- Xylophone/Musical Toy -->
+  <g transform="translate(50, 140)">
+    <!-- Base/frame -->
+    <rect x="30" y="140" width="240" height="15" rx="7" fill="#92400E"/>
+    <rect x="40" y="130" width="220" height="15" rx="4" fill="#A16207"/>
+    
+    <!-- Colorful bars -->
+    <rect x="50" y="60" width="28" height="75" rx="4" fill="url(#piano1)" stroke="#DC2626" stroke-width="1"/>
+    <rect x="82" y="50" width="28" height="85" rx="4" fill="url(#piano2)" stroke="#EA580C" stroke-width="1"/>
+    <rect x="114" y="42" width="28" height="93" rx="4" fill="url(#piano3)" stroke="#F59E0B" stroke-width="1"/>
+    <rect x="146" y="36" width="28" height="99" rx="4" fill="url(#piano4)" stroke="#16A34A" stroke-width="1"/>
+    <rect x="178" y="42" width="28" height="93" rx="4" fill="url(#piano5)" stroke="#2563EB" stroke-width="1"/>
+    <rect x="210" y="50" width="28" height="85" rx="4" fill="url(#piano6)" stroke="#7C3AED" stroke-width="1"/>
+    <rect x="242" y="60" width="28" height="75" rx="4" fill="url(#piano7)" stroke="#DB2777" stroke-width="1"/>
+    
+    <!-- Bar highlights -->
+    <rect x="54" y="65" width="4" height="55" rx="2" fill="white" opacity="0.3"/>
+    <rect x="86" y="55" width="4" height="60" rx="2" fill="white" opacity="0.3"/>
+    <rect x="118" y="47" width="4" height="65" rx="2" fill="white" opacity="0.3"/>
+    <rect x="150" y="41" width="4" height="70" rx="2" fill="white" opacity="0.3"/>
+    <rect x="182" y="47" width="4" height="65" rx="2" fill="white" opacity="0.3"/>
+    <rect x="214" y="55" width="4" height="60" rx="2" fill="white" opacity="0.3"/>
+    <rect x="246" y="65" width="4" height="55" rx="2" fill="white" opacity="0.3"/>
+    
+    <!-- Mallets -->
+    <g transform="translate(85, 15)">
+      <line x1="0" y1="0" x2="30" y2="50" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="32" cy="52" r="8" fill="#FBBF25" stroke="#F59E0B" stroke-width="1.5"/>
+      <circle cx="32" cy="52" r="3" fill="#FDE68A"/>
+    </g>
+    <g transform="translate(185, 10)">
+      <line x1="0" y1="0" x2="-25" y2="55" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="-27" cy="57" r="8" fill="#EC4899" stroke="#DB2777" stroke-width="1.5"/>
+      <circle cx="-27" cy="57" r="3" fill="#F9A8D4"/>
+    </g>
+  </g>
+  
+  <!-- Small drum on side -->
+  <g transform="translate(310, 250)">
+    <ellipse cx="30" cy="50" rx="28" ry="10" fill="#DDD6FE"/>
+    <rect x="2" y="10" width="56" height="40" rx="0" fill="#C4B5FD"/>
+    <ellipse cx="30" cy="10" rx="28" ry="10" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+    <path d="M10 20 L10 45" stroke="#A78BFA" stroke-width="1" stroke-dasharray="3,3"/>
+    <path d="M50 20 L50 45" stroke="#A78BFA" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="30" cy="25" r="6" fill="#DDD6FE" stroke="#A78BFA" stroke-width="1"/>
+  </g>
+  
+  <!-- Ground -->
+  <ellipse cx="200" cy="365" rx="170" ry="15" fill="#FEF3C7" opacity="0.5"/>
+</svg>
