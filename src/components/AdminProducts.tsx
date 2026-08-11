@@ -181,12 +181,28 @@ export function AdminProducts() {
     if (field === "image") setImagePreviewError(false);
   };
 
-  const fileToBase64 = (file: File): Promise<string> =>
+  const compressAndToBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      const maxDim = 800;
+      const quality = 0.7;
+      const img = new window.Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const ratio = Math.min(maxDim / width, maxDim / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas not supported"));
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => reject(new Error("Failed to load image for compression"));
+      img.src = URL.createObjectURL(file);
     });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,11 +213,11 @@ export function AdminProducts() {
     setFormError(null);
 
     try {
-      const base64 = await fileToBase64(file);
+      const base64 = await compressAndToBase64(file);
       handleFieldChange("image", base64);
       setImagePreviewError(false);
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Failed to read image");
+      setFormError(err instanceof Error ? err.message : "Failed to process image");
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -262,14 +278,14 @@ export function AdminProducts() {
       const method = editing ? "PUT" : "POST";
       const url = editing ? `/api/products/${editing._id}` : "/api/products";
       console.log("[AdminProducts] Submitting:", method, url);
-      console.log("[AdminProducts] payload.image:", payload.image);
-      console.log("[AdminProducts] payload.images:", JSON.stringify(payload.images));
+      console.log("[AdminProducts] payload.image:", payload.image?.substring(0, 80));
+      console.log("[AdminProducts] payload.images:", JSON.stringify(payload.images).substring(0, 200));
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         cache: "no-store",
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(30000),
       });
       const data = await res.json();
       console.log("[AdminProducts] Response:", res.status, JSON.stringify(data).substring(0, 300));
@@ -288,7 +304,15 @@ export function AdminProducts() {
       }
       fetchProducts();
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Something went wrong");
+      const msg = err instanceof Error ? err.message : "Something went wrong";
+      const isTimeout = msg.includes("timeout") || msg.includes("AbortError");
+      setToast({
+        type: "error",
+        text: isTimeout
+          ? "Update timed out — try reducing image size or using fewer gallery images."
+          : msg || "Failed to save product. Image size might be too large.",
+      });
+      setFormError(isTimeout ? "Request timed out." : msg);
     } finally {
       setSubmitting(false);
     }
@@ -734,7 +758,7 @@ export function AdminProducts() {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             setUploading(true);
-                            fileToBase64(file)
+                            compressAndToBase64(file)
                               .then((base64) => handleFieldChange("image", base64))
                               .catch(() => {})
                               .finally(() => { setUploading(false); e.target.value = ""; });
@@ -795,7 +819,7 @@ export function AdminProducts() {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
                                 setGalleryUploading(i);
-                                fileToBase64(file)
+                                compressAndToBase64(file)
                                   .then((base64) => handleFieldChange(field, base64))
                                   .catch(() => {})
                                   .finally(() => { setGalleryUploading(null); e.target.value = ""; });
