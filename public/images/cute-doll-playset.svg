@@ -33,7 +33,7 @@
   <rect x="200" y="100" width="160" height="130" rx="8" fill="#DDD6FE" stroke="#C4B5FD" stroke-width="2"/>
   <path d="M190 110 L280 50 L370 110" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
   <path d="M200 110 L280 60 L360 110" fill="#A78BFA"/>
-  <rect x="255" y="155" width="30" height="55" rx="15 15 0 0" fill="#7C3AED"/>
+  <rect x="255" y="155" width="30" height="55" rx="15" fill="#7C3AED"/>
   <circle cx="278" cy="182" r="2.5" fill="#FDE68A"/>
   <rect x="215" y="125" width="25" height="20" rx="4" fill="#93C5FD" stroke="#C4B5FD" stroke-width="1"/>
   <rect x="300" y="125" width="25" height="20" rx="4" fill="#93C5FD" stroke="#C4B5FD" stroke-width="1"/>

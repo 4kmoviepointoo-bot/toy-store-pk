@@ -38,7 +38,7 @@ export function GirlsToysDoll() {
           <path d="M56 14 L89 0 L122 14" fill="#C084FC" />
           <path d="M60 14 L89 4 L118 14" fill="#D8B4FE" />
           {/* Door */}
-          <rect x="80" y="36" width="16" height="24" rx="8 8 0 0" fill="#A855F7" />
+          <rect x="80" y="36" width="16" height="24" rx="8" fill="#A855F7" />
           <circle cx="92" cy="48" r="1.5" fill="#FDE68A" />
           {/* Window left */}
           <rect x="66" y="22" width="12" height="10" rx="2" fill="#93C5FD" stroke="#C4B5FD" strokeWidth="0.8" />
