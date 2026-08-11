@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import type { Product } from "@/lib/products";
 
@@ -55,8 +54,17 @@ export function FeaturedToys() {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-6 w-6 animate-spin text-brand" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="animate-pulse rounded-2xl bg-[#0e2f2b] border border-[#184841] overflow-hidden">
+                <div className="aspect-[4/3] bg-[#184841]/30" />
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-[#184841]/30 rounded w-3/4" />
+                  <div className="h-3 bg-[#184841]/30 rounded w-1/2" />
+                  <div className="h-5 bg-[#184841]/30 rounded w-1/3" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

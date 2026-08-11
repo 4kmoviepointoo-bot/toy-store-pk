@@ -15,7 +15,6 @@ import {
   RotateCcw,
   ChevronRight,
   Package,
-  Loader2,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -100,10 +99,26 @@ export function ProductDetail({ slug }: { slug: string }) {
     return (
       <div className="min-h-dvh flex flex-col bg-[#0b2420]">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="flex items-center gap-3 text-[#a0b4b0]">
-            <Loader2 className="h-5 w-5 animate-spin text-[#1c7865]" />
-            <span className="text-sm">Loading product...</span>
+        <main className="flex-1">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-4 sm:py-6">
+            <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:gap-8">
+              <div className="space-y-3">
+                <div className="aspect-square rounded-2xl bg-[#0e2f2b] animate-pulse" />
+                <div className="grid grid-cols-4 gap-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="aspect-square rounded-xl bg-[#0e2f2b] animate-pulse" />
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="h-6 w-20 rounded bg-[#0e2f2b] animate-pulse" />
+                <div className="h-8 w-3/4 rounded bg-[#0e2f2b] animate-pulse" />
+                <div className="h-5 w-32 rounded bg-[#0e2f2b] animate-pulse" />
+                <div className="h-24 rounded-xl bg-[#0e2f2b] animate-pulse" />
+                <div className="h-20 rounded-xl bg-[#0e2f2b] animate-pulse" />
+                <div className="h-12 rounded-xl bg-[#0e2f2b] animate-pulse" />
+              </div>
+            </div>
           </div>
         </main>
       </div>

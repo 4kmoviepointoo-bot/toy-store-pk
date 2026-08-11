@@ -2,11 +2,16 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { ShoppingCart, Search, Heart, Menu, X, User, Package, LogOut, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
-import { CartDrawer } from "./CartDrawer";
+
+const CartDrawer = dynamic(
+  () => import("./CartDrawer").then((m) => m.CartDrawer),
+  { ssr: false }
+);
 
 export function Navbar() {
   const router = useRouter();

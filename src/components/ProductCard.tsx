@@ -28,10 +28,10 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
   return (
     <div className="group relative flex flex-col rounded-2xl bg-[#0e2f2b] border border-[#184841] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/10">
       {/* Image Container */}
-      <div className="relative">
+      <div className="relative aspect-[4/3]">
         <Link
           href={`/products/${product.slug}`}
-          className="block h-44 overflow-hidden bg-[#0e2f2b] focus:outline-none"
+          className="block h-full overflow-hidden bg-[#0e2f2b] focus:outline-none"
         >
           <Image
             src={product.image}

@@ -325,8 +325,17 @@ function ShopContent() {
           {/* Product Grid */}
           <div className="flex-1">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-brand" />
+              <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="animate-pulse rounded-2xl bg-[#0e2f2b] border border-[#184841] overflow-hidden">
+                    <div className="aspect-[4/3] bg-[#184841]/30" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 bg-[#184841]/30 rounded w-3/4" />
+                      <div className="h-3 bg-[#184841]/30 rounded w-1/2" />
+                      <div className="h-5 bg-[#184841]/30 rounded w-1/3" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : filteredProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
