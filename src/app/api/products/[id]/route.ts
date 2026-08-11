@@ -5,9 +5,6 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 const COLLECTION = "products";
 
 interface ProductDoc {

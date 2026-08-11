@@ -5,6 +5,8 @@ import { Categories } from "@/components/Categories";
 import { FeaturedToys } from "@/components/FeaturedToys";
 import { Features } from "@/components/Features";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "ToyVerse Pakistan | Online Toy Store for Kids",
   description:

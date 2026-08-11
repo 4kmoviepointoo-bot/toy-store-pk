@@ -283,6 +283,20 @@ export interface DbProduct {
   updatedAt: Date;
 }
 
+export async function getAllProductSlugs(): Promise<string[]> {
+  try {
+    const { db } = await connectToDatabase();
+    const docs = await db
+      .collection(COLLECTION)
+      .find()
+      .project({ slug: 1 })
+      .toArray();
+    return docs.map((d) => d.slug as string).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 export async function getProductBySlugFromDb(slug: string): Promise<DbProduct | null> {
   try {
     const { db } = await connectToDatabase();

@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { getProductBySlug } from "@/lib/products";
-import { getProductBySlugFromDb, formatPrice } from "@/lib/seedProducts";
+import { getProductBySlugFromDb, getAllProductSlugs, formatPrice } from "@/lib/seedProducts";
 import { ProductDetail } from "./ProductDetail";
+
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const slugs = await getAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 const SITE_URL = "https://toyverse.pk";
 const PLACEHOLDER_IMG = "/images/placeholder.svg";
