@@ -102,7 +102,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-navy text-text-primary">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="image" href="/hero-banner.png" imageSizes="(max-width: 640px) 280px, (max-width: 1024px) 360px, 520px" />
         <Providers>
           <Sidebar />
           <div className="flex-1 lg:ml-[220px]">
