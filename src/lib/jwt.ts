@@ -2,16 +2,23 @@ import { SignJWT, jwtVerify } from "jose";
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
+let cachedAdminSecret: Uint8Array | null = null;
+let cachedUserSecret: Uint8Array | null = null;
+
 function getAdminJwtSecret(): Uint8Array {
+  if (cachedAdminSecret) return cachedAdminSecret;
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) throw new Error("ADMIN_SESSION_SECRET environment variable is not set");
-  return new TextEncoder().encode(secret);
+  cachedAdminSecret = new TextEncoder().encode(secret);
+  return cachedAdminSecret;
 }
 
 function getUserJwtSecret(): Uint8Array {
+  if (cachedUserSecret) return cachedUserSecret;
   const secret = process.env.USER_SESSION_SECRET;
   if (!secret) throw new Error("USER_SESSION_SECRET environment variable is not set");
-  return new TextEncoder().encode(secret);
+  cachedUserSecret = new TextEncoder().encode(secret);
+  return cachedUserSecret;
 }
 
 export async function createAdminSessionToken(): Promise<string> {

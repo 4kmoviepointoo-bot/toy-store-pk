@@ -16,7 +16,10 @@ export async function findUserByPhone(phone: string): Promise<UserDoc | null> {
 
 export async function findUserById(id: string): Promise<UserDoc | null> {
   const { db } = await connectToDatabase();
-  return db.collection<UserDoc>(COLLECTION).findOne({ _id: new ObjectId(id) });
+  return db.collection<UserDoc>(COLLECTION).findOne(
+    { _id: new ObjectId(id) },
+    { projection: { passwordHash: 0 } }
+  );
 }
 
 export async function createUser(data: Omit<UserDoc, "_id" | "createdAt">): Promise<ObjectId> {

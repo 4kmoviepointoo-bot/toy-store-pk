@@ -140,6 +140,20 @@ export const GET = createSafeRoute(async (request: NextRequest) => {
     .collection<ProductDoc>(COLLECTION)
     .find()
     .sort({ createdAt: -1 })
+    .project<ProductDoc>({
+      name: 1,
+      slug: 1,
+      price: 1,
+      originalPrice: 1,
+      category: 1,
+      image: 1,
+      stock: 1,
+      badge: 1,
+      isFreeDelivery: 1,
+      rating: 1,
+      reviews: 1,
+      createdAt: 1,
+    })
     .toArray();
 
   return apiSuccess(docs.map(serializeProduct));

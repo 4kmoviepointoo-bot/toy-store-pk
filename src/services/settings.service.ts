@@ -17,17 +17,30 @@ const DEFAULTS: ShippingSettings = {
   isProductPriceRuleActive: true,
 };
 
+let settingsCache: ShippingSettings | null = null;
+let settingsCacheTimestamp = 0;
+const SETTINGS_CACHE_TTL_MS = 60_000;
+
 export async function getShippingSettings(): Promise<ShippingSettings> {
+  if (settingsCache && Date.now() - settingsCacheTimestamp < SETTINGS_CACHE_TTL_MS) {
+    return settingsCache;
+  }
+
   try {
     const { db } = await connectToDatabase();
     const doc = await db.collection(COLLECTION).findOne({ key: SETTINGS_KEY });
-    if (!doc) return { ...DEFAULTS };
-    return {
-      freeDeliveryThreshold: doc.freeDeliveryThreshold ?? DEFAULTS.freeDeliveryThreshold,
-      isThresholdEnabled: doc.isThresholdEnabled ?? DEFAULTS.isThresholdEnabled,
-      minProductPriceForFreeDelivery: doc.minProductPriceForFreeDelivery ?? DEFAULTS.minProductPriceForFreeDelivery,
-      isProductPriceRuleActive: doc.isProductPriceRuleActive ?? DEFAULTS.isProductPriceRuleActive,
-    };
+    const result = !doc
+      ? { ...DEFAULTS }
+      : {
+          freeDeliveryThreshold: doc.freeDeliveryThreshold ?? DEFAULTS.freeDeliveryThreshold,
+          isThresholdEnabled: doc.isThresholdEnabled ?? DEFAULTS.isThresholdEnabled,
+          minProductPriceForFreeDelivery: doc.minProductPriceForFreeDelivery ?? DEFAULTS.minProductPriceForFreeDelivery,
+          isProductPriceRuleActive: doc.isProductPriceRuleActive ?? DEFAULTS.isProductPriceRuleActive,
+        };
+
+    settingsCache = result;
+    settingsCacheTimestamp = Date.now();
+    return result;
   } catch {
     return { ...DEFAULTS };
   }
@@ -48,5 +61,7 @@ export async function updateShippingSettings(fields: Partial<ShippingSettings>):
     { upsert: true }
   );
 
+  settingsCache = null;
+  settingsCacheTimestamp = 0;
   return getShippingSettings();
 }

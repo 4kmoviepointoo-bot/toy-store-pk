@@ -81,6 +81,9 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     const client = await connectWithRetry();
     cachedClient = client;
     cachedDb = client.db(MONGODB_DB);
+
+    await ensureIndexes(cachedDb);
+
     return { client, db: cachedDb };
   } catch (error) {
     cachedClient = null;
@@ -89,5 +92,27 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     throw new DatabaseConnectionError(
       "Database unavailable. Please check your connection and try again."
     );
+  }
+}
+
+let indexesEnsured = false;
+
+async function ensureIndexes(db: Db): Promise<void> {
+  if (indexesEnsured) return;
+
+  try {
+    await Promise.all([
+      db.collection("users").createIndex({ email: 1 }, { sparse: true }),
+      db.collection("users").createIndex({ phone: 1 }, { sparse: true }),
+      db.collection("orders").createIndex({ orderId: 1 }),
+      db.collection("orders").createIndex({ userId: 1, createdAt: -1 }),
+      db.collection("reviews").createIndex({ productId: 1, createdAt: -1 }),
+      db.collection("coupons").createIndex({ code: 1 }),
+      db.collection("settings").createIndex({ key: 1 }),
+    ]);
+    indexesEnsured = true;
+    console.log("[MongoDB] Indexes ensured");
+  } catch (err) {
+    console.error("[MongoDB] Failed to create indexes:", err);
   }
 }

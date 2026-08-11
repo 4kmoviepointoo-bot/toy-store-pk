@@ -187,63 +187,51 @@ export async function sendOrderNotification(order: OrderNotificationData): Promi
   // Send to customer (if email provided) + notification email
   if (order.customer.email) {
     tasks.push(
-      resend.emails
-        .send({
+      (async () => {
+        const start = performance.now();
+        const result = await resend.emails.send({
           from: FROM_EMAIL,
-          to: [order.customer.email, NOTIFICATION_EMAIL],
+          to: [order.customer.email!, NOTIFICATION_EMAIL],
           subject: `Order Confirmed! ToyVerse Order #${shortId}`,
           html: customerHtml,
           text: `Order Confirmed! Your ToyVerse order #${shortId} has been received. Total: Rs. ${order.total.toLocaleString()}. Thank you for shopping with ToyVerse Pakistan!`,
-        })
-        .then((res) => {
-          console.log("[Resend] Customer email sent successfully:", JSON.stringify(res));
-          return res;
-        })
-        .catch((err) => {
-          console.error("[Resend] Customer email failed:", JSON.stringify(err));
-          throw err;
-        })
+        });
+        console.log(`[Resend] Customer email sent in ${Math.round(performance.now() - start)}ms`);
+        return result;
+      })()
     );
   } else {
     // No customer email — still send to notification email
     tasks.push(
-      resend.emails
-        .send({
+      (async () => {
+        const start = performance.now();
+        const result = await resend.emails.send({
           from: FROM_EMAIL,
           to: NOTIFICATION_EMAIL,
           subject: `Order Confirmed! ToyVerse Order #${shortId}`,
           html: customerHtml,
           text: `Order Confirmed! Your ToyVerse order #${shortId} has been received. Total: Rs. ${order.total.toLocaleString()}. Thank you for shopping with ToyVerse Pakistan!`,
-        })
-        .then((res) => {
-          console.log("[Resend] Notification email sent successfully:", JSON.stringify(res));
-          return res;
-        })
-        .catch((err) => {
-          console.error("[Resend] Notification email failed:", JSON.stringify(err));
-          throw err;
-        })
+        });
+        console.log(`[Resend] Notification email sent in ${Math.round(performance.now() - start)}ms`);
+        return result;
+      })()
     );
   }
 
   // Send admin notification
   tasks.push(
-    resend.emails
-      .send({
+    (async () => {
+      const start = performance.now();
+      const result = await resend.emails.send({
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL, NOTIFICATION_EMAIL],
         subject: `New Order: ${order.orderId} — Rs. ${order.total.toLocaleString()}`,
         html: adminHtml,
         text: `New Order: ${order.orderId}. Customer: ${order.customer.name} (${order.customer.phone}). Total: Rs. ${order.total.toLocaleString()}. Payment: ${order.paymentLabel}.`,
-      })
-      .then((res) => {
-        console.log("[Resend] Admin email sent successfully:", JSON.stringify(res));
-        return res;
-      })
-      .catch((err) => {
-        console.error("[Resend] Admin email failed:", JSON.stringify(err));
-        throw err;
-      })
+      });
+      console.log(`[Resend] Admin email sent in ${Math.round(performance.now() - start)}ms`);
+      return result;
+    })()
   );
 
   await Promise.allSettled(tasks);

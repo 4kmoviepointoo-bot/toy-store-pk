@@ -56,7 +56,12 @@ export async function createOrder(data: Omit<OrderData, "status" | "currentLocat
 
 export async function getAllOrders() {
   const { db } = await connectToDatabase();
-  const orders = await db.collection(COLLECTION).find().sort({ createdAt: -1 }).toArray();
+  const orders = await db
+    .collection(COLLECTION)
+    .find()
+    .sort({ createdAt: -1 })
+    .project({ orderId: 1, customer: 1, total: 1, status: 1, paymentLabel: 1, createdAt: 1 })
+    .toArray();
   return orders.map(serializeOrder);
 }
 
@@ -69,7 +74,7 @@ export async function findOrderByIdPublic(orderId: string) {
   const { db } = await connectToDatabase();
   const order = await db.collection(COLLECTION).findOne(
     { orderId },
-    { projection: { userId: 1, orderId: 1, customer: 1, delivery: 1, items: 1, subtotal: 1, shipping: 1, couponCode: 1, couponDiscount: 1, total: 1, paymentMethod: 1, paymentLabel: 1, status: 1, createdAt: 1 } }
+    { projection: { userId: 0, currentLocation: 0 } }
   );
   return order ? serializeOrder(order) : null;
 }
@@ -92,6 +97,7 @@ export async function findOrdersByUserId(userId: string) {
     .collection(COLLECTION)
     .find({ userId })
     .sort({ createdAt: -1 })
+    .project({ orderId: 1, customer: 1, total: 1, status: 1, paymentLabel: 1, createdAt: 1 })
     .toArray();
   return orders.map(serializeOrder);
 }
