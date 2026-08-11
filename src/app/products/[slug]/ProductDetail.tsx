@@ -61,7 +61,7 @@ export function ProductDetail({ slug }: { slug: string }) {
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
-    fetch(`/api/products?format=frontend`, { signal: controller.signal })
+    fetch(`/api/products?format=frontend`, { signal: controller.signal, cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         const products = data.data || [];

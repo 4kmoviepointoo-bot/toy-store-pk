@@ -5,6 +5,9 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const COLLECTION = "products";
 
 interface ProductDoc {
@@ -101,6 +104,10 @@ export const PUT = createSafeRoute(
     const body = await request.json();
     const { name, price, originalPrice, category, image, images, description, highlights, brand, material, pieces, ageRange, stock, badge, isFreeDelivery, ageGroup, tags } = body;
 
+    console.log("[API PUT /products/:id] Received update for id:", id);
+    console.log("[API PUT /products/:id] image:", image);
+    console.log("[API PUT /products/:id] images:", JSON.stringify(images));
+
     const updateFields: Record<string, unknown> = { updatedAt: new Date() };
 
     if (name !== undefined) {
@@ -146,7 +153,13 @@ export const PUT = createSafeRoute(
       { $set: updateFields }
     );
 
+    console.log("[API PUT /products/:id] matchedCount:", result.matchedCount, "modifiedCount:", result.modifiedCount);
+    console.log("[API PUT /products/:id] updateFields keys:", Object.keys(updateFields));
+
     if (result.matchedCount === 0) return apiError("Product not found", 404, "NOT_FOUND");
+    if (result.modifiedCount === 0) {
+      console.warn("[API PUT /products/:id] matched but NOT modified — data may be identical");
+    }
 
     revalidatePath("/admin");
     revalidatePath("/api/products");

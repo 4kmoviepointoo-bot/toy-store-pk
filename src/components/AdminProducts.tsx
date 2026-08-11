@@ -117,7 +117,7 @@ export function AdminProducts() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/products");
+      const res = await fetch("/api/products", { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load products");
       const data = await res.json();
       setProducts(data.data || []);
@@ -266,13 +266,18 @@ export function AdminProducts() {
     try {
       const method = editing ? "PUT" : "POST";
       const url = editing ? `/api/products/${editing._id}` : "/api/products";
+      console.log("[AdminProducts] Submitting:", method, url);
+      console.log("[AdminProducts] payload.image:", payload.image);
+      console.log("[AdminProducts] payload.images:", JSON.stringify(payload.images));
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        cache: "no-store",
         signal: AbortSignal.timeout(10000),
       });
       const data = await res.json();
+      console.log("[AdminProducts] Response:", res.status, JSON.stringify(data).substring(0, 300));
       if (!res.ok) throw new Error(data.error || "Failed to save product");
 
       setModalOpen(false);
@@ -299,6 +304,7 @@ export function AdminProducts() {
     try {
       const res = await fetch(`/api/products/${productId}`, {
         method: "DELETE",
+        cache: "no-store",
         signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error("Failed to delete");

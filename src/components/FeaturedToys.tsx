@@ -10,7 +10,7 @@ export function FeaturedToys() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/products?format=frontend", { signal: controller.signal })
+    fetch("/api/products?format=frontend", { signal: controller.signal, cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {

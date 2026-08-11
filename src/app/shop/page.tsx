@@ -44,7 +44,7 @@ function ShopContent() {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    fetch("/api/products?format=frontend")
+    fetch("/api/products?format=frontend", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
