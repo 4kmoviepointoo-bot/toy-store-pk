@@ -131,9 +131,6 @@ export const GET = createSafeRoute(async (request: NextRequest) => {
         ageGroup: 1,
         category: 1,
         tags: 1,
-        createdAt: 0,
-        updatedAt: 0,
-        stock: 0,
       })
       .toArray();
     return apiSuccess(docs.map(serializeForFrontend));
