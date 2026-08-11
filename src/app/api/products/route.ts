@@ -4,6 +4,7 @@ import { verifyAdminSession } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import { seedProductsIfNeeded, formatPrice, getBadgeColor } from "@/lib/seedProducts";
 import { ObjectId } from "mongodb";
+import { revalidatePath } from "next/cache";
 
 const COLLECTION = "products";
 
@@ -171,5 +172,10 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
   };
 
   const result = await db.collection<ProductDoc>(COLLECTION).insertOne(doc);
+
+  revalidatePath("/admin");
+  revalidatePath("/api/products");
+  revalidatePath("/shop");
+
   return apiSuccess(serializeProduct({ ...doc, _id: result.insertedId }), 201);
 });

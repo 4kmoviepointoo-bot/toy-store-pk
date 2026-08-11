@@ -280,6 +280,12 @@ export function AdminProducts() {
         type: "success",
         text: editing ? "Product updated!" : "Product created!",
       });
+
+      if (editing && data.data) {
+        setProducts((prev) =>
+          prev.map((p) => (p._id === editing._id ? data.data : p))
+        );
+      }
       fetchProducts();
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Something went wrong");

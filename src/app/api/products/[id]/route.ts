@@ -3,6 +3,7 @@ import { createSafeRoute, apiSuccess, apiError } from "@/lib/api-wrapper";
 import { verifyAdminSession } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { revalidatePath } from "next/cache";
 
 const COLLECTION = "products";
 
@@ -147,6 +148,10 @@ export const PUT = createSafeRoute(
 
     if (result.matchedCount === 0) return apiError("Product not found", 404, "NOT_FOUND");
 
+    revalidatePath("/admin");
+    revalidatePath("/api/products");
+    revalidatePath("/shop");
+
     const updated = await db.collection<ProductDoc>(COLLECTION).findOne({ _id: objectId });
     if (!updated) return apiError("Product not found after update", 404, "NOT_FOUND");
     return apiSuccess(serializeProduct(updated));
@@ -173,6 +178,10 @@ export const DELETE = createSafeRoute(
     const result = await db.collection<ProductDoc>(COLLECTION).deleteOne({ _id: objectId });
 
     if (result.deletedCount === 0) return apiError("Product not found", 404, "NOT_FOUND");
+
+    revalidatePath("/admin");
+    revalidatePath("/api/products");
+    revalidatePath("/shop");
 
     return apiSuccess({ id });
   }
