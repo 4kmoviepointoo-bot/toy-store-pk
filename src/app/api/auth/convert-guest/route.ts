@@ -32,14 +32,13 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
   const deliveryAddress = order.delivery?.address || "";
   const deliveryCity = order.delivery?.city || "";
 
-  if (customerEmail) {
-    const existingByEmail = await findUserByEmail(customerEmail);
-    if (existingByEmail) {
-      return apiError("An account with this email already exists", 409, "DUPLICATE");
-    }
-  }
+  const checks: Promise<unknown>[] = [findUserByPhone(customerPhone)];
+  if (customerEmail) checks.push(findUserByEmail(customerEmail));
+  const [existingByPhone, existingByEmail] = await Promise.all(checks);
 
-  const existingByPhone = await findUserByPhone(customerPhone);
+  if (existingByEmail) {
+    return apiError("An account with this email already exists", 409, "DUPLICATE");
+  }
   if (existingByPhone) {
     return apiError("An account with this phone number already exists", 409, "DUPLICATE");
   }

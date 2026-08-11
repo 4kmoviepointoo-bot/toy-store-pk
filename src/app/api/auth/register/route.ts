@@ -23,14 +23,13 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
     return apiError("Password must be at least 6 characters", 400, "VALIDATION_ERROR");
   }
 
-  if (email) {
-    const existingByEmail = await findUserByEmail(email);
-    if (existingByEmail) {
-      return apiError("An account with this email already exists", 409, "DUPLICATE");
-    }
-  }
+  const checks: Promise<unknown>[] = [findUserByPhone(phone)];
+  if (email) checks.push(findUserByEmail(email));
+  const [existingByPhone, existingByEmail] = await Promise.all(checks);
 
-  const existingByPhone = await findUserByPhone(phone);
+  if (existingByEmail) {
+    return apiError("An account with this email already exists", 409, "DUPLICATE");
+  }
   if (existingByPhone) {
     return apiError("An account with this phone number already exists", 409, "DUPLICATE");
   }
