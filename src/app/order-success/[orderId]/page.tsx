@@ -437,6 +437,7 @@ export default function OrderSuccessPage(props: { params: Promise<{ orderId: str
                             fill
                             sizes="56px"
                             className="object-cover"
+                            unoptimized={item.image.startsWith("data:")}
                           />
                         </div>
                         <div className="flex-1 min-w-0">

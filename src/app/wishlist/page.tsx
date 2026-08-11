@@ -99,8 +99,9 @@ export default function WishlistPage() {
                         alt={`${item.name} — ToyVerse Pakistan`}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        quality={75}
+                        quality={item.image.startsWith("data:") ? undefined : 75}
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        unoptimized={item.image.startsWith("data:")}
                       />
                       {/* Badge */}
                       <div className={`absolute top-2 left-2 sm:top-3 sm:left-3 z-10 rounded-md sm:rounded-lg ${item.badgeColor} px-1.5 sm:px-2.5 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider shadow-sm`}>

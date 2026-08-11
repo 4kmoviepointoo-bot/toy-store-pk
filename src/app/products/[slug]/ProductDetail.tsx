@@ -22,6 +22,17 @@ import { Navbar } from "@/components/Navbar";
 import { ProductReviews } from "@/components/ProductReviews";
 
 const TABS = ["Description", "Product Details", "Reviews", "Shipping & Returns"];
+const PLACEHOLDER = "/images/placeholder.svg";
+
+function isBase64(src: string): boolean {
+  return src.startsWith("data:");
+}
+
+function safeSrc(src: string | undefined | null): string {
+  if (!src || typeof src !== "string") return PLACEHOLDER;
+  if (src.trim() === "") return PLACEHOLDER;
+  return src;
+}
 
 interface DbProduct {
   slug: string;
@@ -62,14 +73,20 @@ export function ProductDetail({ slug }: { slug: string }) {
     const controller = new AbortController();
     setLoading(true);
     fetch(`/api/products?format=frontend`, { signal: controller.signal, cache: "no-store" })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((data) => {
         const products = data.data || [];
         const found = products.find((p: DbProduct) => p.slug === slug);
         setProduct(found || null);
         setRelatedProducts(products.filter((p: DbProduct) => p.slug !== slug).slice(0, 3));
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error("[ProductDetail] Failed to load product:", err);
+        }
         setProduct(null);
         setRelatedProducts([]);
       })
@@ -181,6 +198,9 @@ export function ProductDetail({ slug }: { slug: string }) {
       ? product.images
       : [product.image, product.image, product.image, product.image];
 
+  const mainSrc = safeSrc(productImages[selectedImage] || product.image);
+  const isMainBase64 = isBase64(mainSrc);
+
   return (
     <div className="min-h-dvh flex flex-col bg-[#0b2420]">
       <Navbar />
@@ -219,13 +239,14 @@ export function ProductDetail({ slug }: { slug: string }) {
               {/* Main Image Card */}
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#0e2f2b] border border-[#184841] shadow-lg">
                 <Image
-                  src={productImages[selectedImage] || product.image}
+                  src={mainSrc}
                   alt={`${product.name} — ToyVerse Pakistan`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 380px"
-                  quality={85}
+                  quality={isMainBase64 ? undefined : 85}
                   className="object-cover p-6"
                   priority
+                  unoptimized={isMainBase64}
                 />
                 {/* Top-Left Badge */}
                 <div
@@ -276,27 +297,32 @@ export function ProductDetail({ slug }: { slug: string }) {
 
               {/* Thumbnails Gallery */}
               <div className="grid grid-cols-4 gap-2 mt-3">
-                {productImages.map((src, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setSelectedImage(i)}
-                    className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all duration-200 ${
-                      selectedImage === i
-                        ? "border-[#1c7865] shadow-md"
-                        : "border-[#184841] hover:border-[#1c7865]/50"
-                    } bg-[#0e2f2b]`}
-                  >
-                    <Image
-                      src={src}
-                      alt={`${product.name} thumbnail ${i + 1}`}
-                      fill
-                      sizes="80px"
-                      quality={60}
-                      className="object-cover p-1"
-                    />
-                  </button>
-                ))}
+                {productImages.map((src, i) => {
+                  const thumbSrc = safeSrc(src);
+                  const isThumbBase64 = isBase64(thumbSrc);
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setSelectedImage(i)}
+                      className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all duration-200 ${
+                        selectedImage === i
+                          ? "border-[#1c7865] shadow-md"
+                          : "border-[#184841] hover:border-[#1c7865]/50"
+                      } bg-[#0e2f2b]`}
+                    >
+                      <Image
+                        src={thumbSrc}
+                        alt={`${product.name} thumbnail ${i + 1}`}
+                        fill
+                        sizes="80px"
+                        quality={isThumbBase64 ? undefined : 60}
+                        className="object-cover p-1"
+                        unoptimized={isThumbBase64}
+                      />
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -631,12 +657,13 @@ export function ProductDetail({ slug }: { slug: string }) {
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#0b2420]">
                         <Image
-                          src={related.image}
+                          src={safeSrc(related.image)}
                           alt={`${related.name} — ToyVerse Pakistan`}
                           fill
                           sizes="(max-width: 640px) 50vw, 33vw"
-                          quality={75}
+                          quality={isBase64(related.image) ? undefined : 75}
                           className="object-cover p-3 transition-transform duration-300 group-hover:scale-105"
+                          unoptimized={isBase64(related.image)}
                         />
                         <div
                           className={`absolute top-1.5 left-1.5 rounded-md px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider shadow-sm ${related.badgeColor}`}

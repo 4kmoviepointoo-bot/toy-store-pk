@@ -7,6 +7,17 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import type { Product } from "@/lib/products";
 
+const PLACEHOLDER = "/images/placeholder.svg";
+
+function isBase64(src: string): boolean {
+  return src.startsWith("data:");
+}
+
+function safeSrc(src: string | undefined | null): string {
+  if (!src || typeof src !== "string" || src.trim() === "") return PLACEHOLDER;
+  return src;
+}
+
 interface ProductCardProps {
   product: Product;
 }
@@ -25,6 +36,9 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
   const fullStars = Math.floor(product.rating);
   const hasHalf = product.rating % 1 >= 0.5;
 
+  const imgSrc = safeSrc(product.image);
+  const imgIsBase64 = isBase64(imgSrc);
+
   return (
     <div className="group relative flex flex-col rounded-2xl bg-[#0e2f2b] border border-[#184841] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/10">
       {/* Image Container */}
@@ -34,12 +48,13 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
           className="block h-full overflow-hidden bg-[#0e2f2b] focus:outline-none"
         >
           <Image
-            src={product.image}
+            src={imgSrc}
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-            quality={75}
+            quality={imgIsBase64 ? undefined : 75}
             className="object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
+            unoptimized={imgIsBase64}
           />
         </Link>
 

@@ -203,6 +203,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                             fill
                             sizes="96px"
                             className="object-cover"
+                            unoptimized={item.image.startsWith("data:")}
                           />
                         </div>
 
