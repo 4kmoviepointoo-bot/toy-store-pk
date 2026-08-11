@@ -82,7 +82,7 @@ function serializeForFrontend(doc: ProductDoc) {
     badgeColor: getBadgeColor(doc.badge),
     image: doc.image,
     images: doc.images && doc.images.length > 0 ? doc.images : [doc.image],
-    description: doc.description,
+    description: doc.description || "",
     highlights: doc.highlights || [],
     brand: doc.brand || "ToyVerse",
     material: doc.material || "ABS Plastic",
@@ -91,7 +91,7 @@ function serializeForFrontend(doc: ProductDoc) {
     isFreeDelivery: doc.isFreeDelivery,
     ageGroup: doc.ageGroup,
     category: doc.category,
-    tags: doc.tags,
+    tags: doc.tags || [],
   };
 }
 
@@ -105,15 +105,45 @@ export const GET = createSafeRoute(async (request: NextRequest) => {
   const format = searchParams.get("format");
 
   const { db } = await connectToDatabase();
+
+  if (format === "frontend") {
+    const docs = await db
+      .collection<ProductDoc>(COLLECTION)
+      .find()
+      .sort({ createdAt: -1 })
+      .project<ProductDoc>({
+        slug: 1,
+        name: 1,
+        price: 1,
+        originalPrice: 1,
+        rating: 1,
+        reviews: 1,
+        badge: 1,
+        image: 1,
+        images: 1,
+        description: 1,
+        highlights: 1,
+        brand: 1,
+        material: 1,
+        pieces: 1,
+        ageRange: 1,
+        isFreeDelivery: 1,
+        ageGroup: 1,
+        category: 1,
+        tags: 1,
+        createdAt: 0,
+        updatedAt: 0,
+        stock: 0,
+      })
+      .toArray();
+    return apiSuccess(docs.map(serializeForFrontend));
+  }
+
   const docs = await db
     .collection<ProductDoc>(COLLECTION)
     .find()
     .sort({ createdAt: -1 })
     .toArray();
-
-  if (format === "frontend") {
-    return apiSuccess(docs.map(serializeForFrontend));
-  }
 
   return apiSuccess(docs.map(serializeProduct));
 });

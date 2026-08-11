@@ -183,8 +183,8 @@ export function AdminProducts() {
 
   const compressAndToBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
-      const maxDim = 800;
-      const quality = 0.7;
+      const maxDim = 600;
+      const quality = 0.6;
       const img = new window.Image();
       img.onload = () => {
         let { width, height } = img;
