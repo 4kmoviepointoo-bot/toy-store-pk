@@ -85,6 +85,7 @@ export function Categories() {
                     fill
                     sizes="(max-width: 640px) 128px, (max-width: 768px) 192px, 224px"
                     quality={75}
+                    priority={index === 0}
                     className="img-zoom object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

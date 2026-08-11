@@ -7,6 +7,8 @@ import { ObjectId } from "mongodb";
 
 const COLLECTION = "products";
 
+let seeded = false;
+
 interface ProductDoc {
   _id?: ObjectId;
   name: string;
@@ -90,7 +92,10 @@ function serializeForFrontend(doc: ProductDoc) {
 }
 
 export const GET = createSafeRoute(async (request: NextRequest) => {
-  await seedProductsIfNeeded();
+  if (!seeded) {
+    await seedProductsIfNeeded();
+    seeded = true;
+  }
 
   const { searchParams } = new URL(request.url);
   const format = searchParams.get("format");

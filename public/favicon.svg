@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c7865"/>
+      <stop offset="100%" stop-color="#0e2f2b"/>
+    </linearGradient>
+    <linearGradient id="star" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ecc94b"/>
+      <stop offset="100%" stop-color="#f6e05e"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- 5-point star -->
+  <path d="
+    M256 80
+    L298 196
+    L420 196
+    L322 270
+    L358 392
+    L256 316
+    L154 392
+    L190 270
+    L92 196
+    L214 196
+    Z
+  " fill="url(#star)" />
+  <!-- Small sparkle accent -->
+  <circle cx="380" cy="110" r="16" fill="#ecc94b" opacity="0.6"/>
+  <circle cx="400" cy="140" r="8" fill="#ecc94b" opacity="0.4"/>
+</svg>
