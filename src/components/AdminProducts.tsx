@@ -181,6 +181,14 @@ export function AdminProducts() {
     if (field === "image") setImagePreviewError(false);
   };
 
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -189,24 +197,11 @@ export function AdminProducts() {
     setFormError(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-        signal: AbortSignal.timeout(30000),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Upload failed");
-      }
-
-      handleFieldChange("image", data.data.url);
+      const base64 = await fileToBase64(file);
+      handleFieldChange("image", base64);
       setImagePreviewError(false);
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Failed to upload image");
+      setFormError(err instanceof Error ? err.message : "Failed to read image");
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -738,12 +733,9 @@ export function AdminProducts() {
                           <input type="file" accept="image/*" onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            const fd = new FormData();
-                            fd.append("file", file);
                             setUploading(true);
-                            fetch("/api/upload", { method: "POST", body: fd, signal: AbortSignal.timeout(30000) })
-                              .then(r => r.json())
-                              .then(d => { if (d.success) handleFieldChange("image", d.data.url); })
+                            fileToBase64(file)
+                              .then((base64) => handleFieldChange("image", base64))
                               .catch(() => {})
                               .finally(() => { setUploading(false); e.target.value = ""; });
                           }} disabled={uploading} className="sr-only" />
@@ -802,12 +794,9 @@ export function AdminProducts() {
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
-                                const fd = new FormData();
-                                fd.append("file", file);
                                 setGalleryUploading(i);
-                                fetch("/api/upload", { method: "POST", body: fd, signal: AbortSignal.timeout(30000) })
-                                  .then(r => r.json())
-                                  .then(d => { if (d.success) handleFieldChange(field, d.data.url); })
+                                fileToBase64(file)
+                                  .then((base64) => handleFieldChange(field, base64))
                                   .catch(() => {})
                                   .finally(() => { setGalleryUploading(null); e.target.value = ""; });
                               }}
