@@ -58,32 +58,53 @@ export function ProductReviews({ slug }: { slug: string }) {
       setError("Please fill in all fields and select a rating.");
       return;
     }
+
+    const previousReviews = reviews;
+    const previousSummary = summary;
+    const optimisticReview: SerializedReview = {
+      _id: `temp-${Date.now()}`,
+      productId: slug,
+      customerName: name.trim(),
+      rating,
+      comment: comment.trim(),
+      verifiedPurchase: false,
+      createdAt: new Date().toISOString(),
+    };
+    const newTotal = summary.totalReviews + 1;
+    const newAvg = (summary.averageRating * summary.totalReviews + rating) / newTotal;
+
+    setReviews((prev) => [optimisticReview, ...prev]);
+    setSummary({ ...summary, averageRating: Math.round(newAvg * 10) / 10, totalReviews: newTotal });
     setSubmitting(true);
     setError(null);
     setSuccess(false);
+    setName("");
+    setRating(0);
+    setComment("");
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 3000);
+
     try {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           productId: slug,
-          customerName: name.trim(),
+          customerName: optimisticReview.customerName,
           rating,
-          comment: comment.trim(),
+          comment: optimisticReview.comment,
         }),
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
         throw new Error(data.error || "Failed to submit review");
       }
-      setSuccess(true);
-      setName("");
-      setRating(0);
-      setComment("");
       fetchReviews();
-      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
+      setReviews(previousReviews);
+      setSummary(previousSummary);
       setError(err instanceof Error ? err.message : "Something went wrong");
+      setSuccess(false);
     } finally {
       setSubmitting(false);
     }

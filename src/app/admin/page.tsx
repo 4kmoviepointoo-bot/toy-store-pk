@@ -275,6 +275,8 @@ export default function AdminDashboardPage() {
   const [updateMessage, setUpdateMessage] = useState<{ id: string; type: "success" | "error"; text: string } | null>(null);
 
   const handleStatusChange = useCallback(async (orderId: string, newStatus: string) => {
+    const previous = orders;
+    setOrders((prev) => prev.map((o) => ((o._id === orderId || o.id === orderId) ? { ...o, status: newStatus as Order["status"] } : o)));
     setUpdatingId(orderId);
     setUpdateMessage(null);
     try {
@@ -286,13 +288,13 @@ export default function AdminDashboardPage() {
       });
       if (!res.ok) throw new Error("Failed to update");
       setUpdateMessage({ id: orderId, type: "success", text: "Updated" });
-      await fetchOrders();
     } catch {
+      setOrders(previous);
       setUpdateMessage({ id: orderId, type: "error", text: "Failed to update" });
     } finally {
       setUpdatingId(null);
     }
-  }, []);
+  }, [orders]);
 
   useEffect(() => {
     if (!updateMessage) return;
@@ -306,6 +308,8 @@ export default function AdminDashboardPage() {
 
   const handleLocationSave = useCallback(async (orderId: string) => {
     const location = locationInputs[orderId] ?? "";
+    const previous = orders;
+    setOrders((prev) => prev.map((o) => ((o._id === orderId || o.id === orderId) ? { ...o, currentLocation: location } : o)));
     setSavingLocationId(orderId);
     setLocationMessage(null);
     try {
@@ -319,8 +323,8 @@ export default function AdminDashboardPage() {
       });
       if (!res.ok) throw new Error("Failed to save");
       setLocationMessage({ id: orderId, type: "success", text: "Location saved" });
-      await fetchOrders();
     } catch {
+      setOrders(previous);
       setLocationMessage({ id: orderId, type: "error", text: "Failed to save" });
     } finally {
       setSavingLocationId(null);
@@ -463,6 +467,21 @@ export default function AdminDashboardPage() {
         expiryDate: f.expiryDate || null,
       };
 
+      const optimisticCoupon = {
+        _id: editingCoupon?._id || `temp-${Date.now()}`,
+        ...payload,
+        usageCount: editingCoupon?.usageCount || 0,
+        createdAt: editingCoupon?.createdAt || new Date().toISOString(),
+      };
+
+      if (editingCoupon) {
+        setCoupons((prev) => prev.map((c) => (c._id === editingCoupon._id ? { ...c, ...payload } : c)));
+      } else {
+        setCoupons((prev) => [optimisticCoupon as CouponData, ...prev]);
+      }
+      setCouponModalOpen(false);
+      setCouponToast({ type: "success", text: editingCoupon ? "Coupon updated!" : "Coupon created!" });
+
       const method = editingCoupon ? "PATCH" : "POST";
       const res = await fetch("/api/admin/coupons", {
         method,
@@ -472,18 +491,14 @@ export default function AdminDashboardPage() {
       });
 
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save coupon");
 
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to save coupon");
+      if (data.data) {
+        setCoupons((prev) => prev.map((c) => (c._id === optimisticCoupon._id ? data.data : c)));
       }
-
-      setCouponModalOpen(false);
-      setCouponToast({
-        type: "success",
-        text: editingCoupon ? "Coupon updated!" : "Coupon created!",
-      });
       fetchCoupons();
     } catch (err) {
+      fetchCoupons();
       setCouponFormError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setCouponSubmitting(false);
@@ -491,6 +506,10 @@ export default function AdminDashboardPage() {
   };
 
   const handleToggleCouponActive = useCallback(async (coupon: CouponData) => {
+    const previous = coupons;
+    setCoupons((prev) =>
+      prev.map((c) => (c._id === coupon._id ? { ...c, active: !c.active } : c))
+    );
     try {
       const res = await fetch("/api/admin/coupons", {
         method: "PATCH",
@@ -499,19 +518,19 @@ export default function AdminDashboardPage() {
         signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error("Failed to update");
-      setCoupons((prev) =>
-        prev.map((c) => (c._id === coupon._id ? { ...c, active: !c.active } : c))
-      );
       setCouponToast({
         type: "success",
         text: `Coupon ${coupon.active ? "deactivated" : "activated"}`,
       });
     } catch {
+      setCoupons(previous);
       setCouponToast({ type: "error", text: "Failed to update coupon status" });
     }
-  }, []);
+  }, [coupons]);
 
   const handleDeleteCoupon = useCallback(async (couponId: string) => {
+    const previous = coupons;
+    setCoupons((prev) => prev.filter((c) => c._id !== couponId));
     setDeletingCouponId(couponId);
     try {
       const res = await fetch("/api/admin/coupons", {
@@ -521,14 +540,14 @@ export default function AdminDashboardPage() {
         signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error("Failed to delete");
-      setCoupons((prev) => prev.filter((c) => c._id !== couponId));
       setCouponToast({ type: "success", text: "Coupon deleted" });
     } catch {
+      setCoupons(previous);
       setCouponToast({ type: "error", text: "Failed to delete coupon" });
     } finally {
       setDeletingCouponId(null);
     }
-  }, []);
+  }, [coupons]);
 
   return (
     <div className="min-h-dvh bg-navy">

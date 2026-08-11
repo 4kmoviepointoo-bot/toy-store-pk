@@ -280,6 +280,28 @@ export function AdminProducts() {
       console.log("[AdminProducts] Submitting:", method, url);
       console.log("[AdminProducts] payload.image:", payload.image?.substring(0, 80));
       console.log("[AdminProducts] payload.images:", JSON.stringify(payload.images).substring(0, 200));
+
+      const optimisticProduct = {
+        _id: editing?._id || `temp-${Date.now()}`,
+        ...payload,
+        slug: payload.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+        rating: editing?.rating || 0,
+        reviews: editing?.reviews || 0,
+        createdAt: editing?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        priceFormatted: `Rs. ${payload.price.toLocaleString()}`,
+        originalPriceFormatted: payload.originalPrice ? `Rs. ${payload.originalPrice.toLocaleString()}` : "",
+        badgeColor: "",
+      };
+
+      if (editing) {
+        setProducts((prev) => prev.map((p) => (p._id === editing._id ? { ...p, ...payload } : p)));
+      } else {
+        setProducts((prev) => [optimisticProduct as unknown as ProductData, ...prev]);
+      }
+      setModalOpen(false);
+      setToast({ type: "success", text: editing ? "Product updated!" : "Product created!" });
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -291,19 +313,14 @@ export function AdminProducts() {
       console.log("[AdminProducts] Response:", res.status, JSON.stringify(data).substring(0, 300));
       if (!res.ok) throw new Error(data.error || "Failed to save product");
 
-      setModalOpen(false);
-      setToast({
-        type: "success",
-        text: editing ? "Product updated!" : "Product created!",
-      });
-
       if (editing && data.data) {
-        setProducts((prev) =>
-          prev.map((p) => (p._id === editing._id ? data.data : p))
-        );
+        setProducts((prev) => prev.map((p) => (p._id === editing._id ? data.data : p)));
+      } else if (data.data) {
+        setProducts((prev) => prev.map((p) => (p._id === optimisticProduct._id ? data.data : p)));
       }
       fetchProducts();
     } catch (err) {
+      fetchProducts();
       const msg = err instanceof Error ? err.message : "Something went wrong";
       const isTimeout = msg.includes("timeout") || msg.includes("AbortError");
       setToast({
@@ -319,6 +336,8 @@ export function AdminProducts() {
   };
 
   const handleDelete = async (productId: string) => {
+    const previous = products;
+    setProducts((prev) => prev.filter((p) => p._id !== productId));
     setDeletingId(productId);
     try {
       const res = await fetch(`/api/products/${productId}`, {
@@ -327,9 +346,9 @@ export function AdminProducts() {
         signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error("Failed to delete");
-      setProducts((prev) => prev.filter((p) => p._id !== productId));
       setToast({ type: "success", text: "Product deleted" });
     } catch {
+      setProducts(previous);
       setToast({ type: "error", text: "Failed to delete product" });
     } finally {
       setDeletingId(null);
