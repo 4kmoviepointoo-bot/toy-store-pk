@@ -4,6 +4,7 @@ import { Providers } from "@/components/Providers";
 import { Sidebar } from "@/components/Sidebar";
 import { Footer } from "@/components/Footer";
 import { LazyWhatsAppButton } from "@/components/LazyWhatsAppButton";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -100,18 +101,20 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-navy text-text-primary">
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <Providers>
-          <Sidebar />
-          <div className="flex-1 lg:ml-[220px]">
-            {children}
+        <SmoothScroll>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <Providers>
+            <Sidebar />
+            <div className="flex-1 lg:ml-[220px]">
+              {children}
+            </div>
+          </Providers>
+          <div className="lg:ml-[220px]">
+            <Footer />
           </div>
-        </Providers>
-        <div className="lg:ml-[220px]">
-          <Footer />
-        </div>
-        <LazyWhatsAppButton />
+          <LazyWhatsAppButton />
+        </SmoothScroll>
       </body>
     </html>
   );
