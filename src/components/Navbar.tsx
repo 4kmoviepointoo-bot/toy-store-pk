@@ -22,7 +22,8 @@ export function Navbar() {
   const [accountOpen, setAccountOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cartIconRef = useRef<HTMLButtonElement>(null);
-  const { cartCount } = useCart();
+  const { items } = useCart();
+  const totalQuantity = items.reduce((total, item) => total + item.quantity, 0);
   const { wishlistCount } = useWishlist();
   const { user, logout } = useAuth();
 
@@ -171,9 +172,9 @@ export function Navbar() {
           >
             <div className="relative">
               <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
-              {cartCount > 0 && (
+              {totalQuantity > 0 && (
                 <span className="absolute -top-2 -right-2.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white shadow-sm">
-                  {cartCount}
+                  {totalQuantity}
                 </span>
               )}
             </div>
@@ -218,9 +219,9 @@ export function Navbar() {
           >
             <div className="relative">
               <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
-              {cartCount > 0 && (
+              {totalQuantity > 0 && (
                 <span className="absolute -top-2 -right-2.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white shadow-sm">
-                  {cartCount}
+                  {totalQuantity}
                 </span>
               )}
             </div>
