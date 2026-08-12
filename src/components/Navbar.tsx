@@ -16,8 +16,9 @@ const CartDrawer = dynamic(
 export function Navbar() {
   const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [accountOpen, setAccountOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cartIconRef = useRef<HTMLButtonElement>(null);
@@ -43,9 +44,10 @@ export function Navbar() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const q = searchTerm.trim();
-    if (q) {
-      router.push(`/shop?search=${encodeURIComponent(q)}`);
+    if (searchQuery.trim()) {
+      router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      inputRef.current?.focus();
     }
   };
 
@@ -65,13 +67,19 @@ export function Navbar() {
 
         {/* Search Box — circular expanding */}
         <form onSubmit={handleSearch} className="tv-search-form" role="search">
-          <button type="submit" aria-label="Search" className="tv-btn-search">
+          <button
+            type="submit"
+            aria-label="Search"
+            className="tv-btn-search"
+            onClick={() => inputRef.current?.focus()}
+          >
             <Search className="h-4 w-4" strokeWidth={2.5} />
           </button>
           <input
+            ref={inputRef}
             type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
             placeholder="Type to Search..."
