@@ -1,20 +1,11 @@
 "use client";
 
-import { Heart } from "lucide-react";
-
 const FOOTER_LINKS = {
   shop: [
     { label: "All Products", href: "/shop" },
     { label: "New Arrivals", href: "/shop?sort=newest" },
     { label: "Best Sellers", href: "/shop?onSale=true" },
     { label: "Deals & Offers", href: "/shop?onSale=true" },
-  ],
-  company: [
-    { label: "About Us", href: "/about" },
-    { label: "Services", href: "/services" },
-    { label: "Portfolio", href: "/portfolio" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Contact", href: "/contact" },
   ],
   support: [
     { label: "Track Order", href: "/track-order" },
@@ -40,7 +31,7 @@ export function Footer() {
   return (
     <footer className="bg-surface border-t border-border/60">
       <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-4 lg:mb-0">
             <a href="/" className="flex items-center gap-2.5 mb-4">
@@ -57,20 +48,6 @@ export function Footer() {
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-text-muted mb-4">Shop</h3>
             <ul className="space-y-2.5">
               {FOOTER_LINKS.shop.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} className="text-sm text-text-secondary hover:text-brand transition-colors">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-text-muted mb-4">Company</h3>
-            <ul className="space-y-2.5">
-              {FOOTER_LINKS.company.map((link) => (
                 <li key={link.label}>
                   <a href={link.href} className="text-sm text-text-secondary hover:text-brand transition-colors">
                     {link.label}

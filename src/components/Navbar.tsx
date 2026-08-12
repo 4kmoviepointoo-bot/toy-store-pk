@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { ShoppingCart, Search, Heart, Menu, X, User, Package, LogOut, ChevronDown } from "lucide-react";
+import { ShoppingCart, Search, Heart, User, Package, LogOut } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
@@ -13,70 +13,13 @@ const CartDrawer = dynamic(
   { ssr: false }
 );
 
-interface NavItem {
-  label: string;
-  href: string;
-  children?: { label: string; href: string; description?: string }[];
-}
-
-const NAV_ITEMS: NavItem[] = [
-  {
-    label: "About Us",
-    href: "/about",
-    children: [
-      { label: "Our Story", href: "/about#our-story", description: "Learn our journey" },
-      { label: "Team", href: "/about#team", description: "Meet the people" },
-      { label: "Careers", href: "/about#careers", description: "Join our team" },
-    ],
-  },
-  {
-    label: "Services",
-    href: "/services",
-    children: [
-      { label: "Web Development", href: "/services#web-development", description: "Custom web solutions" },
-      { label: "Mobile Apps", href: "/services#mobile-app-development", description: "iOS & Android" },
-      { label: "UI/UX Design", href: "/services#uiux-design", description: "Beautiful experiences" },
-      { label: "Digital Marketing", href: "/services#digital-marketing", description: "Grow your reach" },
-    ],
-  },
-  {
-    label: "Portfolio",
-    href: "/portfolio",
-    children: [
-      { label: "Our Work", href: "/portfolio#our-work", description: "Featured projects" },
-      { label: "Case Studies", href: "/portfolio#case-studies", description: "Deep dives" },
-      { label: "Testimonials", href: "/portfolio#testimonials", description: "Client reviews" },
-    ],
-  },
-  {
-    label: "Pricing",
-    href: "/pricing",
-    children: [
-      { label: "Plans", href: "/pricing#plans", description: "Choose your plan" },
-      { label: "Features", href: "/pricing#features", description: "What's included" },
-      { label: "FAQ", href: "/pricing#faq", description: "Common questions" },
-    ],
-  },
-  {
-    label: "Contact",
-    href: "/contact",
-    children: [
-      { label: "Get in Touch", href: "/contact#get-in-touch", description: "Reach out to us" },
-      { label: "Support", href: "/contact#support", description: "Help center" },
-      { label: "Locations", href: "/contact#locations", description: "Find us" },
-    ],
-  },
-];
-
 export function Navbar() {
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [accountOpen, setAccountOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const cartIconRef = useRef<HTMLButtonElement>(null);
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const { user, logout } = useAuth();
@@ -92,12 +35,6 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [accountOpen]);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
   const handleLogout = async () => {
     setAccountOpen(false);
     await logout();
@@ -111,75 +48,29 @@ export function Navbar() {
     }
   };
 
-  const handleDropdownEnter = (label: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setActiveDropdown(label);
-  };
-
-  const handleDropdownLeave = () => {
-    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
-  };
+  const getCartIconRect = useCallback(() => {
+    return cartIconRef.current?.getBoundingClientRect() || null;
+  }, []);
 
   return (
     <>
     <header className="sticky top-0 z-50 bg-navy/90 backdrop-blur-xl border-b border-border/60 shadow-premium-sm">
-      <nav className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-6 py-3 lg:px-8">
+      {/* Main nav row */}
+      <nav className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
         {/* Mobile Logo */}
-        <a href="/" className="flex items-center gap-2.5 shrink-0 group lg:hidden">
-          <span className="text-2xl transition-transform duration-300 group-hover:scale-110" role="img" aria-label="teddy bear">
+        <a href="/" className="flex items-center gap-2 shrink-0 group lg:hidden">
+          <span className="text-xl transition-transform duration-300 group-hover:scale-110" role="img" aria-label="teddy bear">
             🧸
           </span>
-          <span className="text-[18px] font-extrabold tracking-tight rainbow-text">
+          <span className="text-[16px] font-extrabold tracking-tight rainbow-text">
             ToyVerse
           </span>
         </a>
 
-        {/* Desktop Nav Links */}
-        <div className="hidden lg:flex items-center gap-1">
-          {NAV_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="relative"
-              onMouseEnter={() => handleDropdownEnter(item.label)}
-              onMouseLeave={handleDropdownLeave}
-            >
-              <a
-                href={item.href}
-                className="flex items-center gap-1 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
-              >
-                {item.label}
-                {item.children && (
-                  <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === item.label ? "rotate-180" : ""}`} />
-                )}
-              </a>
-              {item.children && activeDropdown === item.label && (
-                <div
-                  className="absolute left-0 top-full mt-1 w-64 rounded-2xl bg-surface border border-border/60 shadow-premium-lg py-3 z-50 animate-fade-in-up"
-                  onMouseEnter={() => handleDropdownEnter(item.label)}
-                  onMouseLeave={handleDropdownLeave}
-                >
-                  {item.children.map((child) => (
-                    <a
-                      key={child.label}
-                      href={child.href}
-                      className="block px-4 py-2.5 hover:bg-brand-light/60 transition-all"
-                    >
-                      <span className="block text-sm font-semibold text-text-primary hover:text-brand">{child.label}</span>
-                      {child.description && (
-                        <span className="block text-[11px] text-text-muted mt-0.5">{child.description}</span>
-                      )}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-4 lg:mx-6">
+        <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-2 sm:mx-4 lg:mx-6">
           <div className="relative w-full group">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted">
               <Search className="h-4 w-4" strokeWidth={2} />
             </span>
             <input
@@ -187,14 +78,14 @@ export function Navbar() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search for toys, games, and more..."
-              className="w-full rounded-full border border-border/80 bg-surface/80 py-2.5 pl-11 pr-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10 transition-all duration-200"
+              className="w-full rounded-full border border-border/80 bg-surface/80 py-2 pl-10 pr-10 sm:pr-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10 transition-all duration-200"
             />
             <button
               type="submit"
               aria-label="Search"
-              className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark transition-colors duration-200"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark transition-colors duration-200"
             >
-              <Search className="h-3.5 w-3.5" strokeWidth={2.5} />
+              <Search className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
             </button>
           </div>
         </form>
@@ -230,7 +121,7 @@ export function Navbar() {
               >
                 <User className="h-[18px] w-[18px]" strokeWidth={2} />
                 <span className="hidden xl:inline">Hi, {user.name.split(" ")[0]}</span>
-                <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${accountOpen ? "rotate-180" : ""}`} />
+                <svg className={`h-3 w-3 transition-transform duration-200 ${accountOpen ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
               </button>
             ) : (
               <a
@@ -286,143 +177,63 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl text-text-secondary hover:bg-brand-light hover:text-brand transition-all duration-200"
-        >
-          {mobileOpen ? (
-            <X className="h-5 w-5" strokeWidth={2} />
-          ) : (
-            <Menu className="h-5 w-5" strokeWidth={2} />
-          )}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="lg:hidden border-t border-border/60 bg-navy/98 backdrop-blur-xl animate-fade-in-up overflow-hidden">
-          <div className="mx-auto max-w-7xl px-5 py-5 flex flex-col gap-1.5">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearch} className="relative mb-2">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">
-                <Search className="h-4 w-4" strokeWidth={2} />
+        {/* Mobile Utility Icons — always visible, no hamburger needed */}
+        <div className="flex lg:hidden items-center gap-1">
+          <a
+            href="/track-order"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            aria-label="Track Order"
+          >
+            <Package className="h-[18px] w-[18px]" strokeWidth={2} />
+          </a>
+          <a
+            href="/wishlist"
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            aria-label="Wishlist"
+          >
+            <Heart className="h-[18px] w-[18px]" strokeWidth={2} />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-brand px-0.5 text-[8px] font-bold text-white">
+                {wishlistCount}
               </span>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search for toys..."
-                className="w-full rounded-xl border border-border/80 bg-surface/80 py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand/50 transition-all duration-200"
-              />
-            </form>
-
-            {/* Mobile Nav Links */}
-            {NAV_ITEMS.map((item) => (
-              <div key={item.label}>
-                <a
-                  href={item.href}
-                  className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </a>
-                {item.children && (
-                  <div className="ml-4 border-l border-border/40 pl-3 mb-1">
-                    {item.children.map((child) => (
-                      <a
-                        key={child.label}
-                        href={child.href}
-                        className="block rounded-lg px-3 py-1.5 text-xs text-text-muted hover:text-brand transition-all"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {child.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {/* Mobile Actions */}
-            <div className="mt-2 flex items-center gap-3 border-t border-border/40 pt-4">
-              <a
-                href="/track-order"
-                className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Package className="h-5 w-5" strokeWidth={2} />
-                Track Order
-              </a>
-              <a
-                href="/wishlist"
-                className="relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Heart className="h-5 w-5" strokeWidth={2} />
-                Wishlist
-                {wishlistCount > 0 && (
-                  <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white">
-                    {wishlistCount}
-                  </span>
-                )}
-              </a>
-              {user ? (
-                <>
-                  <div className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-brand bg-brand-light/40">
-                    <User className="h-5 w-5" strokeWidth={2} />
-                    Hi, {user.name.split(" ")[0]}
-                  </div>
-                  <a
-                    href="/account"
-                    className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <Package className="h-5 w-5" strokeWidth={2} />
-                    My Orders
-                  </a>
-                  <button
-                    type="button"
-                    onClick={async () => { await handleLogout(); setMobileOpen(false); }}
-                    className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-all duration-200"
-                  >
-                    <LogOut className="h-5 w-5" strokeWidth={2} />
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <a
-                  href="/account"
-                  className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <User className="h-5 w-5" strokeWidth={2} />
-                  Account
-                </a>
-              )}
-              <button
-                type="button"
-                onClick={() => { setCartOpen(true); setMobileOpen(false); }}
-                className="relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-              >
-                <ShoppingCart className="h-5 w-5" strokeWidth={2} />
-                Cart
-                {cartCount > 0 && (
-                  <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
+            )}
+          </a>
+          <a
+            href="/account"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            aria-label="Account"
+          >
+            <User className="h-[18px] w-[18px]" strokeWidth={2} />
+          </a>
+          <button
+            ref={cartIconRef}
+            type="button"
+            onClick={() => setCartOpen(true)}
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            aria-label="Cart"
+            id="nav-cart-icon"
+          >
+            <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-brand px-0.5 text-[8px] font-bold text-white">
+                {cartCount}
+              </span>
+            )}
+          </button>
         </div>
-      )}
+      </nav>
     </header>
 
-    {/* Cart Drawer — rendered outside <header> to escape backdrop-blur stacking context */}
+    {/* Cart Drawer */}
     <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
+}
+
+export function getCartIconPosition(): { x: number; y: number } | null {
+  if (typeof document === "undefined") return null;
+  const el = document.getElementById("nav-cart-icon");
+  if (!el) return null;
+  const rect = el.getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 }
