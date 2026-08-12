@@ -1,0 +1,18 @@
+# TOYVERSE DESIGN RULES
+
+- THEME RESTRICTION: Preserve existing dark green/emerald palette (#1c7865, dark background) and gold accents. Do not change colors or brand layout.
+
+1. MOTION (Emil Kowalski):
+- Use smooth spring physics/cubic-bezier easing for all interactions.
+- Animate only `opacity` and `transform` (scale, translate3d) for high performance.
+- Product Cards: Subtle 4px translateY lift and soft shadow on hover.
+- Buttons: 1.02x hover scale, 0.98x active press effect.
+
+2. IMPECCABLE:
+- No pure black overlays; tint all dark backgrounds with subtle brand green hues.
+- Fix awkward text wrapping using `text-wrap: balance` on titles.
+- Use clean padding and negative space instead of nesting boxes inside boxes.
+
+3. TASTE SKILL:
+- Avoid generic AI patterns (no purple/teal glow, no heavy blur glassmorphism).
+- Clean focus states (`:focus-visible`) for all buttons and search inputs.

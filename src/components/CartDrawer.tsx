@@ -75,7 +75,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[100] bg-black/60 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[100] bg-[#0b2420]/80 backdrop-blur-sm transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -173,18 +173,19 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
 
               {/* Items List */}
               <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
-                <div className="flex flex-col gap-4">
-                  {items.map((item) => {
-                    const isSelected = selectedSet.has(item.name);
-                    return (
-                      <div
-                        key={item.name}
-                        className={`flex gap-4 rounded-2xl border p-4 transition-all duration-250 ${
-                          isSelected
-                            ? "cart-item-selected"
-                            : "cart-item-deselected"
-                        }`}
-                      >
+                 <div className="flex flex-col gap-4" key={open ? "open" : "closed"}>
+                   {items.map((item, index) => {
+                     const isSelected = selectedSet.has(item.name);
+                     return (
+                       <div
+                         key={item.name}
+                         className={`cart-item-enter flex gap-4 rounded-2xl border p-4 transition-all duration-250 ${
+                           isSelected
+                             ? "cart-item-selected"
+                             : "cart-item-deselected"
+                         }`}
+                         style={{ animationDelay: `${index * 0.05}s` }}
+                       >
                         {/* Checkbox */}
                         <button
                           type="button"

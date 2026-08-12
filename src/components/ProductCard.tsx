@@ -72,7 +72,7 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
   const badgeClass = product.badge ? (BADGE_COLORS[product.badge] || "bg-surface-light text-text-secondary") : "";
 
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-surface border border-border/50 overflow-hidden shadow-sm hover:shadow-lg hover:shadow-black/10 transition-all duration-300 hover:-translate-y-0.5">
+    <div className="group relative flex flex-col rounded-2xl bg-surface border border-border/50 overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/15 transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
       {/* Image Container */}
       <div className="relative aspect-[4/3] bg-navy/40">
         <Link
@@ -175,10 +175,10 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
           type="button"
           onClick={handleAddToCart}
           aria-label={addedItem === product.name ? `${product.name} added to cart` : `Add ${product.name} to cart`}
-          className={`w-full mt-3 py-2.5 sm:py-3 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center gap-2 transition-all duration-300 ${
+          className={`w-full mt-3 py-2.5 sm:py-3 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center gap-2 transition-[transform,background-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             addedItem === product.name
               ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
-              : "bg-brand text-white hover:bg-brand-dark active:scale-[0.97] shadow-sm hover:shadow-md hover:shadow-brand/20"
+              : "bg-brand text-white hover:bg-brand-dark hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md hover:shadow-brand/20"
           }`}
         >
           {addedItem === product.name ? (

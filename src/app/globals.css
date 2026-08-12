@@ -766,7 +766,7 @@ html {
   border-radius: 22px;
   background-color: var(--color-brand);
   color: #fff;
-  transition: all 0.5s ease-in-out;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tv-input-search::placeholder {
@@ -801,7 +801,7 @@ html {
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   padding-left: 14px;
   color: #fff;
-  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+  transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1), background-color 500ms cubic-bezier(0.16, 1, 0.3, 1), border-color 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Focused state — full-width overlay bar so it never overlaps logo/icons */
@@ -835,5 +835,44 @@ html {
   .tv-input-search,
   .tv-input-search:focus {
     transition: none;
+  }
+}
+
+/* ===== cursorrules polish: Motion / Impeccable / Taste ===== */
+
+/* Cart drawer item entrance — staggered fade + scale */
+@keyframes cartItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cart-item-enter {
+  animation: cartItemIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Impeccable: balanced title wrapping */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* Taste: clean focus-visible states for interactive elements */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-item-enter {
+    animation: none;
   }
 }
