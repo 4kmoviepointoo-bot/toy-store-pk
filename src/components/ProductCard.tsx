@@ -49,7 +49,7 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
           endX: cartPos.x,
           endY: cartPos.y,
         });
-        setTimeout(() => setFlyParticle(null), 700);
+        setTimeout(() => setFlyParticle(null), 900);
       }
     }
   }, [addToCart, product]);
@@ -190,7 +190,7 @@ export const ProductCard = memo(function ProductCard({ product }: ProductCardPro
           style={{
             left: flyParticle.startX,
             top: flyParticle.startY,
-            animation: "flyToCart 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards",
+            animation: "flyToCart 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards",
             "--fly-end-x": `${flyParticle.endX - flyParticle.startX}px`,
             "--fly-end-y": `${flyParticle.endY - flyParticle.startY}px`,
           } as React.CSSProperties}

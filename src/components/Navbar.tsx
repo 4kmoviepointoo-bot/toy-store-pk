@@ -17,6 +17,7 @@ export function Navbar() {
   const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cartIconRef = useRef<HTMLButtonElement>(null);
@@ -68,22 +69,32 @@ export function Navbar() {
         </a>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-2 sm:mx-4 lg:mx-6">
+        <form onSubmit={handleSearch} className={`transition-all duration-300 ease-out min-w-0 mx-2 sm:mx-4 lg:mx-6 ${searchFocused ? "flex-[1.3]" : "flex-1"}`}>
           <div className="relative w-full group">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-200 group-focus-within:text-brand">
               <Search className="h-4 w-4" strokeWidth={2} />
             </span>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
               placeholder="Search for toys, games, and more..."
-              className="w-full rounded-full border border-border/80 bg-surface/80 py-2 pl-10 pr-10 sm:pr-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10 transition-all duration-200"
+              className={`w-full rounded-full border bg-surface/80 py-2 pl-10 pr-10 sm:pr-12 text-sm text-text-primary placeholder:text-text-muted outline-none transition-all duration-300 ease-out ${
+                searchFocused
+                  ? "border-brand/60 bg-surface ring-2 ring-brand/15 shadow-lg shadow-brand/5 py-2.5 sm:py-3"
+                  : "border-border/80 focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10 py-2"
+              }`}
             />
             <button
               type="submit"
               aria-label="Search"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark transition-colors duration-200"
+              className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark transition-all duration-300 ease-out ${
+                searchFocused
+                  ? "right-1.5 h-8 w-8 sm:h-9 sm:w-9"
+                  : "right-1.5 h-7 w-7 sm:h-8 sm:w-8"
+              }`}
             >
               <Search className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
             </button>
