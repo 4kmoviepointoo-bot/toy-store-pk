@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { Navbar } from "@/components/Navbar";
 import { ProductReviews } from "@/components/ProductReviews";
 
 const TABS = ["Description", "Product Details", "Reviews", "Shipping & Returns"];
@@ -115,7 +114,7 @@ export function ProductDetail({ slug }: { slug: string }) {
   if (loading) {
     return (
       <div className="min-h-dvh flex flex-col bg-[#0b2420]">
-        <Navbar />
+
         <main className="flex-1">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 py-4 sm:py-6">
             <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:gap-8">
@@ -145,7 +144,7 @@ export function ProductDetail({ slug }: { slug: string }) {
   if (!product) {
     return (
       <div className="min-h-dvh flex flex-col bg-[#0b2420]">
-        <Navbar />
+
         <main className="flex-1 flex items-center justify-center px-5 py-16">
           <div className="text-center max-w-md">
             <div className="mb-6 flex justify-center">
@@ -203,7 +202,7 @@ export function ProductDetail({ slug }: { slug: string }) {
 
   return (
     <div className="min-h-dvh flex flex-col bg-[#0b2420]">
-      <Navbar />
+
       <main className="flex-1">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-4 sm:py-6">
           {/* Breadcrumb */}

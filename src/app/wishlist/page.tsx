@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Heart, ShoppingCart, Trash2, ArrowLeft, Star, Check } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
-import { Navbar } from "@/components/Navbar";
 
 export default function WishlistPage() {
   const { items, removeFromWishlist } = useWishlist();
@@ -22,7 +21,6 @@ export default function WishlistPage() {
 
   return (
     <div className="min-h-dvh flex flex-col bg-navy">
-      <Navbar />
       <main className="flex-1">
         <div className="mx-auto max-w-[1200px] px-5 sm:px-6 lg:px-10 py-8 sm:py-12">
           {/* Header */}

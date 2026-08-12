@@ -1,20 +1,6 @@
 export default function ProductLoading() {
   return (
     <div className="min-h-dvh flex flex-col bg-navy">
-      {/* Navbar placeholder */}
-      <div className="sticky top-0 z-50 bg-navy/90 backdrop-blur-xl border-b border-border/60">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-6 py-4 lg:px-10">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-surface animate-pulse" />
-            <div className="h-4 w-24 rounded-lg bg-surface animate-pulse" />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-xl bg-surface animate-pulse" />
-            <div className="h-10 w-10 rounded-xl bg-surface animate-pulse" />
-          </div>
-        </div>
-      </div>
-
       <main className="flex-1">
         <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 py-4 sm:py-8 lg:py-10 overflow-hidden">
           {/* Back button placeholder */}

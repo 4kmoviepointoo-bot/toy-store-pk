@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { Navbar } from "@/components/Navbar";
 import { InvoiceDownload } from "@/components/InvoiceDownload";
 
 interface OrderItem {
@@ -255,7 +254,7 @@ export default function OrderSuccessPage(props: { params: Promise<{ orderId: str
   if (!loaded) {
     return (
       <div className="min-h-dvh flex flex-col bg-navy">
-        <Navbar />
+
         <main className="flex-1 flex items-center justify-center px-5 py-16">
           <div className="flex items-center gap-3 text-text-secondary">
             <Loader2 className="h-5 w-5 animate-spin text-purple" />
@@ -269,7 +268,7 @@ export default function OrderSuccessPage(props: { params: Promise<{ orderId: str
   if (!order || fetchError) {
     return (
       <div className="min-h-dvh flex flex-col bg-navy">
-        <Navbar />
+
         <main className="flex-1 flex items-center justify-center px-5 py-16">
           <div className="text-center max-w-md">
             <div className="mb-6 flex justify-center">
@@ -304,7 +303,7 @@ export default function OrderSuccessPage(props: { params: Promise<{ orderId: str
 
   return (
     <div className="min-h-dvh flex flex-col bg-navy">
-      <Navbar />
+
       <main className="flex-1">
         <div className="mx-auto max-w-[900px] px-5 sm:px-6 lg:px-10 py-8 sm:py-12">
           {/* Success Header */}

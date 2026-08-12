@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
 import { FeaturedToys } from "@/components/FeaturedToys";
@@ -43,7 +42,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="min-h-dvh flex flex-col bg-navy">
-      <Navbar />
       <main className="flex-1">
         <Hero />
         <Categories />

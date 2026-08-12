@@ -15,7 +15,6 @@ import {
   AlertCircle,
   ChevronDown,
 } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
 import { InvoiceDownload } from "@/components/InvoiceDownload";
 
 interface OrderItem {
@@ -180,7 +179,6 @@ export default function TrackOrderPage() {
 
   return (
     <div className="min-h-dvh flex flex-col bg-navy">
-      <Navbar />
       <main className="flex-1">
         <div className="mx-auto max-w-[700px] px-5 sm:px-6 lg:px-10 py-8 sm:py-12">
           {/* Header */}
