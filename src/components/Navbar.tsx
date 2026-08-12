@@ -63,37 +63,25 @@ export function Navbar() {
           </span>
         </a>
 
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-2 sm:mx-4 lg:mx-8">
-          <div className={`relative flex items-center rounded-full border transition-all duration-300 ease-out ${
-            searchFocused
-              ? "border-brand/50 bg-surface shadow-[0_0_0_3px_rgba(28,120,101,0.1),0_4px_12px_rgba(0,0,0,0.15)]"
-              : "border-border/60 bg-surface/70 shadow-sm hover:border-border/80 hover:bg-surface/90"
-          }`}>
-            <span className={`pl-3.5 sm:pl-4 shrink-0 transition-colors duration-200 ${searchFocused ? "text-brand" : "text-text-muted"}`}>
-              <Search className="h-4 w-4" strokeWidth={2} />
-            </span>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-              placeholder="Search for toys, games, and more..."
-              className="w-full bg-transparent py-2.5 sm:py-3 pl-2.5 sm:pl-3 pr-0 text-sm text-text-primary placeholder:text-text-muted/70 outline-none"
-            />
-            <button
-              type="submit"
-              aria-label="Search"
-              className="shrink-0 mr-1.5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark active:scale-95 transition-all duration-200"
-            >
-              <Search className="h-3.5 w-3.5" strokeWidth={2.5} />
-            </button>
-          </div>
+        {/* Search Box — circular expanding */}
+        <form onSubmit={handleSearch} className="tv-search-form" role="search">
+          <button type="submit" aria-label="Search" className="tv-btn-search">
+            <Search className="h-4 w-4" strokeWidth={2.5} />
+          </button>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder="Type to Search..."
+            aria-label="Search products"
+            className="tv-input-search"
+          />
         </form>
 
         {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-1.5">
+        <div className="hidden lg:flex items-center gap-1.5 ml-auto">
           <a
             href="/track-order"
             className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
@@ -181,7 +169,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile Utility Icons */}
-        <div className="flex lg:hidden items-center gap-0.5">
+        <div className={`flex lg:hidden items-center gap-0.5 ml-auto ${searchFocused ? "max-sm:hidden" : ""}`}>
           <a
             href="/wishlist"
             className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
