@@ -49,29 +49,28 @@ export function Navbar() {
     }
   };
 
-  const getCartIconRect = useCallback(() => {
-    return cartIconRef.current?.getBoundingClientRect() || null;
-  }, []);
-
   return (
     <>
-    <header className="sticky top-0 z-50 bg-navy/90 backdrop-blur-xl border-b border-border/60 shadow-premium-sm">
-      {/* Main nav row */}
-      <nav className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
-        {/* Mobile Logo */}
-        <a href="/" className="flex items-center gap-2 shrink-0 group lg:hidden">
-          <span className="text-xl transition-transform duration-300 group-hover:scale-110" role="img" aria-label="teddy bear">
+    <header className="sticky top-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-border/40">
+      <nav className="mx-auto max-w-[1400px] flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 lg:px-8">
+        {/* Logo */}
+        <a href="/" className="flex items-center gap-2 shrink-0 group">
+          <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:scale-110" role="img" aria-label="teddy bear">
             🧸
           </span>
-          <span className="text-[16px] font-extrabold tracking-tight rainbow-text">
+          <span className="text-[15px] sm:text-[17px] font-extrabold tracking-tight rainbow-text">
             ToyVerse
           </span>
         </a>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className={`transition-all duration-300 ease-out min-w-0 mx-2 sm:mx-4 lg:mx-6 ${searchFocused ? "flex-[1.3]" : "flex-1"}`}>
-          <div className="relative w-full group">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-200 group-focus-within:text-brand">
+        <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-2 sm:mx-4 lg:mx-8">
+          <div className={`relative flex items-center rounded-full border transition-all duration-300 ease-out ${
+            searchFocused
+              ? "border-brand/50 bg-surface shadow-[0_0_0_3px_rgba(28,120,101,0.1),0_4px_12px_rgba(0,0,0,0.15)]"
+              : "border-border/60 bg-surface/70 shadow-sm hover:border-border/80 hover:bg-surface/90"
+          }`}>
+            <span className={`pl-3.5 sm:pl-4 shrink-0 transition-colors duration-200 ${searchFocused ? "text-brand" : "text-text-muted"}`}>
               <Search className="h-4 w-4" strokeWidth={2} />
             </span>
             <input
@@ -81,43 +80,34 @@ export function Navbar() {
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
               placeholder="Search for toys, games, and more..."
-              className={`w-full rounded-full border bg-surface/80 py-2 pl-10 pr-10 sm:pr-12 text-sm text-text-primary placeholder:text-text-muted outline-none transition-all duration-300 ease-out ${
-                searchFocused
-                  ? "border-brand/60 bg-surface ring-2 ring-brand/15 shadow-lg shadow-brand/5 py-2.5 sm:py-3"
-                  : "border-border/80 focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10 py-2"
-              }`}
+              className="w-full bg-transparent py-2.5 sm:py-3 pl-2.5 sm:pl-3 pr-0 text-sm text-text-primary placeholder:text-text-muted/70 outline-none"
             />
             <button
               type="submit"
               aria-label="Search"
-              className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark transition-all duration-300 ease-out ${
-                searchFocused
-                  ? "right-1.5 h-8 w-8 sm:h-9 sm:w-9"
-                  : "right-1.5 h-7 w-7 sm:h-8 sm:w-8"
-              }`}
+              className="shrink-0 mr-1.5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-brand text-white hover:bg-brand-dark active:scale-95 transition-all duration-200"
             >
-              <Search className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
+              <Search className="h-3.5 w-3.5" strokeWidth={2.5} />
             </button>
           </div>
         </form>
 
         {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-1.5">
           <a
             href="/track-order"
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
           >
             <Package className="h-[18px] w-[18px]" strokeWidth={2} />
-            <span>Track Order</span>
+            <span>Track</span>
           </a>
           <a
             href="/wishlist"
-            className="relative flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+            className="relative flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
           >
             <Heart className="h-[18px] w-[18px]" strokeWidth={2} />
-            <span>Wishlist</span>
             {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white">
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-pink px-1 text-[9px] font-bold text-white">
                 {wishlistCount}
               </span>
             )}
@@ -128,16 +118,16 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => setAccountOpen(!accountOpen)}
-                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
               >
                 <User className="h-[18px] w-[18px]" strokeWidth={2} />
-                <span className="hidden xl:inline">Hi, {user.name.split(" ")[0]}</span>
+                <span className="hidden xl:inline">{user.name.split(" ")[0]}</span>
                 <svg className={`h-3 w-3 transition-transform duration-200 ${accountOpen ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
               </button>
             ) : (
               <a
                 href="/account"
-                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
               >
                 <User className="h-[18px] w-[18px]" strokeWidth={2} />
                 <span>Account</span>
@@ -148,7 +138,7 @@ export function Navbar() {
                 <a
                   href="/account"
                   onClick={() => setAccountOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all"
                 >
                   <User className="h-4 w-4" />
                   Profile
@@ -156,7 +146,7 @@ export function Navbar() {
                 <a
                   href="/account"
                   onClick={() => setAccountOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all"
                 >
                   <Package className="h-4 w-4" />
                   My Orders
@@ -173,45 +163,40 @@ export function Navbar() {
               </div>
             )}
           </div>
+          {/* Cart — Desktop */}
           <button
             type="button"
             onClick={() => setCartOpen(true)}
-            className="relative flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+            className="relative flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
           >
-            <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
-            <span>Cart</span>
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
+            <div className="relative">
+              <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </div>
           </button>
         </div>
 
-        {/* Mobile Utility Icons — always visible, no hamburger needed */}
-        <div className="flex lg:hidden items-center gap-1">
-          <a
-            href="/track-order"
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
-            aria-label="Track Order"
-          >
-            <Package className="h-[18px] w-[18px]" strokeWidth={2} />
-          </a>
+        {/* Mobile Utility Icons */}
+        <div className="flex lg:hidden items-center gap-0.5">
           <a
             href="/wishlist"
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
             aria-label="Wishlist"
           >
             <Heart className="h-[18px] w-[18px]" strokeWidth={2} />
             {wishlistCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-brand px-0.5 text-[8px] font-bold text-white">
+              <span className="absolute top-0.5 right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-pink px-0.5 text-[8px] font-bold text-white">
                 {wishlistCount}
               </span>
             )}
           </a>
           <a
             href="/account"
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
             aria-label="Account"
           >
             <User className="h-[18px] w-[18px]" strokeWidth={2} />
@@ -220,16 +205,18 @@ export function Navbar() {
             ref={cartIconRef}
             type="button"
             onClick={() => setCartOpen(true)}
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
             aria-label="Cart"
             id="nav-cart-icon"
           >
-            <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
-            {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-brand px-0.5 text-[8px] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
+            <div className="relative">
+              <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={2} />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-bold text-white shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </div>
           </button>
         </div>
       </nav>
