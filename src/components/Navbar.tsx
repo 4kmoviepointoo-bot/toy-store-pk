@@ -13,13 +13,70 @@ const CartDrawer = dynamic(
   { ssr: false }
 );
 
+interface NavItem {
+  label: string;
+  href: string;
+  children?: { label: string; href: string; description?: string }[];
+}
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    label: "About Us",
+    href: "/about",
+    children: [
+      { label: "Our Story", href: "/about#our-story", description: "Learn our journey" },
+      { label: "Team", href: "/about#team", description: "Meet the people" },
+      { label: "Careers", href: "/about#careers", description: "Join our team" },
+    ],
+  },
+  {
+    label: "Services",
+    href: "/services",
+    children: [
+      { label: "Web Development", href: "/services#web-development", description: "Custom web solutions" },
+      { label: "Mobile Apps", href: "/services#mobile-app-development", description: "iOS & Android" },
+      { label: "UI/UX Design", href: "/services#uiux-design", description: "Beautiful experiences" },
+      { label: "Digital Marketing", href: "/services#digital-marketing", description: "Grow your reach" },
+    ],
+  },
+  {
+    label: "Portfolio",
+    href: "/portfolio",
+    children: [
+      { label: "Our Work", href: "/portfolio#our-work", description: "Featured projects" },
+      { label: "Case Studies", href: "/portfolio#case-studies", description: "Deep dives" },
+      { label: "Testimonials", href: "/portfolio#testimonials", description: "Client reviews" },
+    ],
+  },
+  {
+    label: "Pricing",
+    href: "/pricing",
+    children: [
+      { label: "Plans", href: "/pricing#plans", description: "Choose your plan" },
+      { label: "Features", href: "/pricing#features", description: "What's included" },
+      { label: "FAQ", href: "/pricing#faq", description: "Common questions" },
+    ],
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    children: [
+      { label: "Get in Touch", href: "/contact#get-in-touch", description: "Reach out to us" },
+      { label: "Support", href: "/contact#support", description: "Help center" },
+      { label: "Locations", href: "/contact#locations", description: "Find us" },
+    ],
+  },
+];
+
 export function Navbar() {
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [accountOpen, setAccountOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const { user, logout } = useAuth();
@@ -35,6 +92,12 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [accountOpen]);
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const handleLogout = async () => {
     setAccountOpen(false);
     await logout();
@@ -46,6 +109,15 @@ export function Navbar() {
     if (q) {
       router.push(`/shop?search=${encodeURIComponent(q)}`);
     }
+  };
+
+  const handleDropdownEnter = (label: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveDropdown(label);
+  };
+
+  const handleDropdownLeave = () => {
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
   };
 
   return (
@@ -61,6 +133,48 @@ export function Navbar() {
             ToyVerse
           </span>
         </a>
+
+        {/* Desktop Nav Links */}
+        <div className="hidden lg:flex items-center gap-1">
+          {NAV_ITEMS.map((item) => (
+            <div
+              key={item.label}
+              className="relative"
+              onMouseEnter={() => handleDropdownEnter(item.label)}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <a
+                href={item.href}
+                className="flex items-center gap-1 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-brand hover:bg-brand-light transition-all duration-200"
+              >
+                {item.label}
+                {item.children && (
+                  <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === item.label ? "rotate-180" : ""}`} />
+                )}
+              </a>
+              {item.children && activeDropdown === item.label && (
+                <div
+                  className="absolute left-0 top-full mt-1 w-64 rounded-2xl bg-surface border border-border/60 shadow-premium-lg py-3 z-50 animate-fade-in-up"
+                  onMouseEnter={() => handleDropdownEnter(item.label)}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  {item.children.map((child) => (
+                    <a
+                      key={child.label}
+                      href={child.href}
+                      className="block px-4 py-2.5 hover:bg-brand-light/60 transition-all"
+                    >
+                      <span className="block text-sm font-semibold text-text-primary hover:text-brand">{child.label}</span>
+                      {child.description && (
+                        <span className="block text-[11px] text-text-muted mt-0.5">{child.description}</span>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Search Bar */}
         <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-4 lg:mx-6">
@@ -204,6 +318,34 @@ export function Navbar() {
                 className="w-full rounded-xl border border-border/80 bg-surface/80 py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand/50 transition-all duration-200"
               />
             </form>
+
+            {/* Mobile Nav Links */}
+            {NAV_ITEMS.map((item) => (
+              <div key={item.label}>
+                <a
+                  href={item.href}
+                  className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-text-secondary hover:text-brand hover:bg-brand-light/60 transition-all duration-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </a>
+                {item.children && (
+                  <div className="ml-4 border-l border-border/40 pl-3 mb-1">
+                    {item.children.map((child) => (
+                      <a
+                        key={child.label}
+                        href={child.href}
+                        className="block rounded-lg px-3 py-1.5 text-xs text-text-muted hover:text-brand transition-all"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {child.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
             {/* Mobile Actions */}
             <div className="mt-2 flex items-center gap-3 border-t border-border/40 pt-4">
               <a

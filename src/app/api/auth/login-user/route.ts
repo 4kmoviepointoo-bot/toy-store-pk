@@ -26,7 +26,19 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
     return apiError("Invalid credentials", 401, "AUTH_FAILED");
   }
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!user.passwordHash) {
+    console.error("[Login] User found but passwordHash is missing:", user._id);
+    return apiError("Account setup incomplete. Please register again.", 400, "ACCOUNT_INCOMPLETE");
+  }
+
+  let valid = false;
+  try {
+    valid = await bcrypt.compare(password, user.passwordHash);
+  } catch (err) {
+    console.error("[Login] bcrypt.compare failed:", err);
+    return apiError("Invalid credentials", 401, "AUTH_FAILED");
+  }
+
   if (!valid) {
     return apiError("Invalid credentials", 401, "AUTH_FAILED");
   }
