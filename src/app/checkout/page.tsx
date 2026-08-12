@@ -35,7 +35,7 @@ function validateEmail(email: string): boolean {
 }
 
 export default function CheckoutPage() {
-  const { items, loaded, selectedItems, selectedSubtotal } = useCart();
+  const { items, loaded, selectedItems, selectedSubtotal, clearCart } = useCart();
   const router = useRouter();
   const [selectedPayment, setSelectedPayment] = useState("cod");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -210,7 +210,8 @@ export default function CheckoutPage() {
         orderId: orderData.orderId,
         phone: orderData.phone,
       }));
-      router.push(`/order-success/${orderData.orderId}`);
+      clearCart();
+      router.push(`/order-tracking?id=${orderData.orderId}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
       console.error("Order save failed:", err);

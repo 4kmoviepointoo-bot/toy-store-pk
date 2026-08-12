@@ -47,7 +47,7 @@ export async function createOrder(data: Omit<OrderData, "status" | "currentLocat
   const { db } = await connectToDatabase();
   const result = await db.collection(COLLECTION).insertOne({
     ...data,
-    status: "pending",
+    status: "Placed",
     currentLocation: "",
     createdAt: new Date(),
   });
@@ -77,6 +77,19 @@ export async function findOrderByIdPublic(orderId: string) {
     { projection: { userId: 0, currentLocation: 0 } }
   );
   return order ? serializeOrder(order) : null;
+}
+
+export async function findOrdersByPhone(phone: string) {
+  const cleaned = phone.replace(/[\s\-]/g, "");
+  if (!cleaned) return [];
+  const { db } = await connectToDatabase();
+  const orders = await db
+    .collection(COLLECTION)
+    .find({ "customer.phone": { $regex: cleaned, $options: "i" } })
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .toArray();
+  return orders.map(serializeOrder);
 }
 
 export async function updateOrderStatus(id: string, status: string, currentLocation?: string) {

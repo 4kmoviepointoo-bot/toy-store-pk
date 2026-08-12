@@ -96,7 +96,7 @@ export function Navbar() {
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-1.5 ml-auto">
           <a
-            href="/track-order"
+            href="/order-tracking"
             className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
           >
             <Package className="h-[18px] w-[18px]" strokeWidth={2} />
@@ -184,7 +184,7 @@ export function Navbar() {
         {/* Mobile Utility Icons */}
         <div className={`flex lg:hidden items-center gap-0.5 ml-auto ${searchFocused ? "max-sm:hidden" : ""}`}>
           <a
-            href="/track-order"
+            href="/order-tracking"
             className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
             aria-label="Track Order"
           >

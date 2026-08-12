@@ -41,7 +41,21 @@ export const POST = createSafeRoute(async (request: NextRequest) => {
   return apiSuccess(result, 201);
 });
 
-export const GET = createSafeRoute(async () => {
+export const GET = createSafeRoute(async (request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+  const orderId = searchParams.get("orderId");
+  const phone = searchParams.get("phone");
+
+  if (orderId) {
+    const order = await ordersController.findByOrderIdPublic(orderId);
+    return apiSuccess({ order });
+  }
+
+  if (phone) {
+    const orders = await ordersController.findByPhone(phone);
+    return apiSuccess({ orders });
+  }
+
   const authed = await verifyAdminSession();
   if (!authed) return apiError("Unauthorized", 401, "UNAUTHORIZED");
 

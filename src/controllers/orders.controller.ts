@@ -1,7 +1,7 @@
 import { ApiError } from "@/lib/api-wrapper";
 import * as orderService from "@/services/orders.service";
 
-const VALID_STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+const VALID_STATUSES = ["pending", "Placed", "confirmed", "processing", "shipped", "dispatched", "delivered", "cancelled"];
 
 export async function createOrder(body: Record<string, unknown>) {
   if (!body.orderId || !body.name || !body.phone || !body.address || !body.city || !Array.isArray(body.items) || body.items.length === 0) {
@@ -68,4 +68,18 @@ export async function trackOrder(body: Record<string, unknown>) {
     currentLocation: order.currentLocation || "",
     paymentMethod: order.paymentLabel || order.paymentMethod,
   };
+}
+
+export async function findByOrderIdPublic(orderId: string) {
+  const id = (orderId || "").toString().trim();
+  if (!id) throw new ApiError(400, "Order ID is required", "VALIDATION_ERROR");
+  const order = await orderService.findOrderByIdPublic(id);
+  if (!order) throw new ApiError(404, "Order not found", "NOT_FOUND");
+  return order;
+}
+
+export async function findByPhone(phone: string) {
+  const cleaned = (phone || "").toString().trim().replace(/[\s\-]/g, "");
+  if (!cleaned) throw new ApiError(400, "Phone number is required", "VALIDATION_ERROR");
+  return orderService.findOrdersByPhone(cleaned);
 }

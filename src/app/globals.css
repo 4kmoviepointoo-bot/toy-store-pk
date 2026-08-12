@@ -876,3 +876,32 @@ h4 {
     animation: none;
   }
 }
+
+/* ===== Order tracking stepper ===== */
+@keyframes stepPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.step-node {
+  animation: stepPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.step-line-fill {
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-node {
+    animation: none;
+  }
+  .step-line-fill {
+    transition: none;
+  }
+}
