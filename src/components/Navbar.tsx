@@ -54,7 +54,7 @@ export function Navbar() {
   return (
     <>
     <header className="sticky top-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-border/40">
-      <nav className="mx-auto max-w-[1400px] flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 lg:px-8">
+      <nav className="relative mx-auto max-w-[1400px] flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 lg:px-8">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2 shrink-0 group">
           <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:scale-110" role="img" aria-label="teddy bear">
@@ -66,7 +66,11 @@ export function Navbar() {
         </a>
 
         {/* Search Box — circular expanding */}
-        <form onSubmit={handleSearch} className="tv-search-form" role="search">
+        <form
+          onSubmit={handleSearch}
+          className={`tv-search-form ${searchFocused ? "is-open" : ""}`}
+          role="search"
+        >
           <button
             type="submit"
             aria-label="Search"
@@ -178,6 +182,13 @@ export function Navbar() {
 
         {/* Mobile Utility Icons */}
         <div className={`flex lg:hidden items-center gap-0.5 ml-auto ${searchFocused ? "max-sm:hidden" : ""}`}>
+          <a
+            href="/track-order"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
+            aria-label="Track Order"
+          >
+            <Package className="h-[18px] w-[18px]" strokeWidth={2} />
+          </a>
           <a
             href="/wishlist"
             className="relative flex h-9 w-9 items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
